@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=800, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UN PDF Downloader</title>
+    <style>
+    html {
+        font-size: 28px;
+        font-family: "Courier New", monospace;
+        background: white;
+        color: #888;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    body {
+        overflow: hidden;
+        max-width: 942px;
+        max-height: 710px;
+    }
+
+    input {
+        font-size: 0.7em;
+    }
+
+    .main {
+        position: relative;
+        left: 264px;
+    }
+
+    .userinput {
+        position: relative;
+        left: -50px;
+    }
+
+    .ui {
+        font-size: 75%;
+    }
+
+    input {
+        display: inline-block;
+        cursor: text;
+    }
+
+    input.short {
+        width: 210px;
+    }
+
+    a.button1 {
+        position: relative;
+        top: 45px;
+        left: 23px;
+        text-decoration: none;
+        border: 1px solid #3A3A3A;
+        font-size: 110%;
+        color: #4D4D4D;
+        padding: 6px 12px;
+        border-radius: 3px;
+        background: white;
+        font-family: Consolas;
+    }
+
+    a.button1:hover {
+        background: #ddd;
+    }
+
+    div.header {
+        height: 166px;
+        background: url(./logo.png) no-repeat;
+        background-position: center;
+    }
+
+    input::-webkit-input-placeholder {
+        color: #C2C2C2;
+        opacity: 1;
+    }
+
+    #log {
+        font-size: 0.4em;
+        position: relative;
+        left: -44px;
+        top: 60px;
+    }
+
+    input.pointer {
+        cursor: pointer;
+        position: relative;
+        left: 15px;
+    }
+
+    .au {
+        font-size: 150%;
+    }
+    </style>
+    <link rel="stylesheet" href="../css/swal.css" />
+    <link rel="stylesheet" href="../css/button.css" />
+    <link rel="stylesheet" href="../css/animate.css" />
+</head>
+<body>
+    <script src="../js/jquery-3.0.0.js"></script>
+    <script>
+    window.addEventListener("mousewheel", e => e.preventDefault(), { passive: false });
+    </script>
+    <div class="header"></div>
+    <div class="main">
+        <span style="color: black; position: relative; left: 5px;">请选择PDF语言：</span>
+        <div style="height: 20px;"></div>
+        <div>
+            <input name="lang" type="radio" id="zh_CN" class="pointer" checked>
+            <span class="ui">中文Chinese</span>
+        </div>
+        <div>
+            <input name="lang" type="radio" id="en_US" class="pointer">
+            <span class="ui">英语English</span>
+        </div>
+        <br />
+        <span style="position: relative; left: -30px; color: black;">具体信息（二选一）：</span>
+        <br />
+        <div class="userinput">
+            <span class="ui">关键词：</span><input id="search" type="text" class="short" placeholder="关键词语">
+        </div>
+        <div class="userinput">
+            <span class="ui">文件号：</span><input id="path" type="text" class="short" placeholder="文件路径">
+        </div>
+        <a href="#" id="submit" class="button1">Download</a>
+        <div id="log">
+            <div class="au">来自不想考试挂科的G171117 - PRZ</div>
+            <div class="log"></div>
+        </div>
+    </div>
+    <script src="../js/web.js"></script>
+</body>
+</html>

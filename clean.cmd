@@ -1,0 +1,2 @@
+@rmdir /Q /S ".\out\un_pdf_downloader-win32-ia32\resources\app"
+@"C:\Program Files (x86)\NSIS\makensis.exe"  /NOTIFYHWND 593642  "C:\Users\Administrator\Desktop\Work\Code\Electron.js\UN.ORG_PDF_Downloader\install.nsi"
