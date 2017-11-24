@@ -51,7 +51,7 @@
 
     a.button1 {
         position: relative;
-        top: 45px;
+        top: 15px;
         left: 23px;
         text-decoration: none;
         border: 1px solid #3A3A3A;
@@ -80,9 +80,8 @@
 
     #log {
         font-size: 0.4em;
-        position: relative;
-        left: -44px;
-        top: 60px;
+        margin-top: 30px;
+        text-align: center;
     }
 
     input.pointer {
@@ -125,11 +124,19 @@
         <div class="userinput">
             <span class="ui">文件号：</span><input id="path" type="text" class="short" placeholder="文件路径">
         </div>
-        <a href="#" id="submit" class="button1">Download</a>
-        <div id="log">
-            <div class="au">来自不想考试挂科的G171117 - PRZ</div>
-            <div class="log"></div>
+        <div>
+            <input name="ftype" type="radio" id="d_pdf" class="pointer" checked>
+            <span class="ui">下载PDF文档</span>
         </div>
+        <div>
+            <input name="ftype" type="radio" id="d_doc" class="pointer">
+            <span class="ui">下载Word文档</span>
+        </div>
+        <a href="#" id="submit" class="button1">Download</a>
+    </div>
+    <div id="log">
+        <div class="au">来自心累无比的G171117 - PRZ（逃</div>
+        <div class="log"></div>
     </div>
     <script src="../js/web.js"></script>
 </body>

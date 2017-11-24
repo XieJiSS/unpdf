@@ -33,7 +33,7 @@ function createWindow() {
         resizable: false,
     });
 
-    win.setMenu(null);
+    //win.setMenu(null);
 
     win.on("ready-to-show", () => {
         win.show();
@@ -50,7 +50,7 @@ function createWindow() {
     );
 
     // Open the DevTools.
-    // win.webContents.openDevTools();
+     win.webContents.openDevTools();
 
     // Emitted when the window is closed.
     win.on("closed", () => {

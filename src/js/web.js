@@ -1,6 +1,5 @@
 "use strict";
 
-//https://daccess-ods.un.org/access.nsf/GetFile?Open&DS=S/RES/1860(2009)&Lang=C&Type=DOC
 
 const http = require("http");
 
@@ -139,23 +138,25 @@ String.prototype.toTitle = function toTitle() {
 
 let ctx_search = "https://search.un.org/results.php?query={0}&lang={1}&tpl=ods";
 let ctx_file = "http://daccess-ods.un.org/access.nsf/get?open&DS={0}&Lang={1}";
+let ctx_doc = "https://daccess-ods.un.org/access.nsf/GetFile?Open&DS={0}&Lang={1}&Type=DOC"
 
 function main () {
     let l = $("#zh_CN")[0].checked ? "zh_CN" : "en_US";
     let vp = $("#path").val() || "";
     let vs = $("#search").val() || "";
+    let ftype = getFileType();
     if(vp.trim()) {
         $("#search")[0].parentNode.style = "";
-        download($("#path").val(), languages[l].file, vp);
+        download($("#path").val(), languages[l].file, vp, ftype);
     } else if(vs.trim()) {
         $("#search")[0].parentNode.style = "";
-        search($("#search").val(), languages[l]);
+        search($("#search").val(), languages[l], ftype);
     } else {
         $("#search")[0].parentNode.style = "color: red;";
     }
 }
 
-function search (str, language) {
+function search (str, language, ftype) {
     let files = [];
     let lang = language.search;
     let jqXHR = $.get(ctx_search.format(encode(str), encode(lang)), data => {
@@ -187,16 +188,16 @@ function search (str, language) {
                 title, 
             });
         }
-        asklist(files);
+        asklist(files, ftype);
     });
 }
 
-function asklist(list) {
+function asklist(list, ftype) {
     if(list.length === 0) {
         return;
     }
     swal({
-        title: "下载文件？",
+        title: `下载文件？`,
         html: "摘要：<br />" + list[0]
             .about
             .replace(/\</g, "&lt;")
@@ -213,7 +214,7 @@ function asklist(list) {
         cancelButtonClass: 'btn btn-info',
         buttonsStyling: false,
     }).then(() => {
-        download(list[0].path, list[0].file, list[0].title, true);
+        download(list[0].path, list[0].file, list[0].title, ftype, true);
     }, dismiss => {
         if(dismiss === "cancel") {
             list.shift();
@@ -222,10 +223,10 @@ function asklist(list) {
     });
 }
 
-function download(p, l, t, isTitle=false) {
+function download(p, l, t, ftype="PDF", isTitle=false) {
     swal({
         title: "处理中",
-        text: isTitle ? `正在尝试下载${t}……` : `正在尝试下载${t}号文件……`,
+        text: isTitle ? `正在尝试下载${t}，格式为${ftype}……` : `正在尝试下载${t}号文件，格式为${ftype}……`,
         timer: 5000,
         type: "info",
         allowOutsideClick: false,
@@ -240,7 +241,11 @@ function download(p, l, t, isTitle=false) {
         let arr = p.replace(/^https?\:\/\//, "").split("/");
         arr.shift();
         p = arr.join("/");
-        u = ctx_file.format(p, l);
+        if(ftype !== "DOC") {
+            u = ctx_file.format(p, l);
+        } else {
+            u = ctx_doc.format(p, l);
+        }
     }
     $.get(u, data => {
         if(data.includes("There is no document matching your request")) {
@@ -271,3 +276,16 @@ $("input#path")[0].addEventListener("keydown", ev => {
 }, { passive: true });
 
 $("#submit").click(main);
+
+function getFileType () {
+    let pdf = $("#d_pdf")[0].checked;
+    let doc = $("#d_doc")[0].checked;
+    if(pdf) {
+        return "PDF";
+    } else if(doc) {
+        return "DOC";
+    } else {
+        (console.warn || console.log)("未获取到文件格式！");
+        return "PDF";
+    }
+}
