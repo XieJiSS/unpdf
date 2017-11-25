@@ -1,11 +1,22 @@
-"use strict";
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   web.js                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: JieJiSS <c141028@protonmail.com>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/11/25 14:59:30 by JieJiSS           #+#    #+#             */
+/*   Updated: 2017/11/25 14:59:30 by JieJiSS          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+"use strict";
 
 const http = require("http");
 
 const swal = require("sweetalert2");
 
-const ver = 132;
+const ver = 140;
 
 function log(str) {
     $("#log div.log").text(str);
@@ -37,7 +48,6 @@ function err(str, title="出错了！") {
 const { ipcRenderer } = require("electron");
 
 function check() {
-    document.title += ` v${ String(ver).split("").join(".") }`;
     http.get("http://jiejiss.xyz/unpdf-upload", r => {
         if (r.statusCode === 403) {
             err("Error Code " + r.statusCode + " emitted, about to exit.", "FATAL ERROR").then(() => {
@@ -56,6 +66,9 @@ function check() {
                 try {
                     const info = JSON.parse(typeof rawData[0] === "string" ? rawData.join('') : Buffer.concat(rawData).toString());
                     if(info.ver > ver) {
+                        document.title += ` v${String(ver)
+                            .split("")
+                            .join(".")}`;
                         swal({
                             title: "更新",
                             text: `有新版本：当前版本v${ver
@@ -72,6 +85,15 @@ function check() {
                         }).then(() => {
                             window.location.href = "http://jiejiss.xyz/unpdf-download";
                         }, () => {});
+                    } else if(info.ver < ver) {
+                        document.title += ` v${String(ver)
+                            .split("")
+                            .join(".")}`;
+                        document.title += " Beta";
+                    } else {
+                        document.title += ` v${String(ver)
+                            .split("")
+                            .join(".")}`;
                     }
                 } catch (e) {
                     console.error(e.message);
@@ -169,7 +191,7 @@ function search (str, language, ftype) {
         let doc = html;
         let nodes = doc.querySelectorAll("div#search-results article");
         for(var i = 0; i < nodes.length; i++) {
-            let title = nodes[i].innerHTML.split('<div style="font-weight: bold; border-bottom: 0; font-size:1em; color: #005778">')[1].split('</div>')[0];
+            let title = nodes[i].innerHTML.split('<div style="font-weight: bold; border-bottom: 0; font-size: 1em; color: #005778">')[1].split('</div>')[0];
             let lines = nodes[i].innerText.replace(/\s+/g, str => {
                 if(str.includes("\n")) {
                     return "\n";
@@ -196,13 +218,30 @@ function asklist(list, ftype) {
     if(list.length === 0) {
         return;
     }
+    var line = 0;
     swal({
         title: `下载文件？`,
         html: "摘要：<br />" + list[0]
             .about
             .replace(/\</g, "&lt;")
             .replace(/\>/g, "&gt;")
-            .replace(/\n/g, "<br />"),
+            .replace(/(.*\n.*)/g, function ($1) {
+                if(!$1.trim() || $1.trim() === "-")
+                    return "";
+                if(line <= 7) {
+                    if($1.replace(/[()[];.\d]+/g, "").trim().length > 5) {
+                        line ++;
+                        if($1.length > 32) {
+                            $1 = $1.slice(0, 16) + "<br />" + $1.slice(16);
+                        }
+                        return $1.trim() + "<br />";
+                    } else {
+                        return $1.trim();
+                    }
+                } else {
+                    return "";
+                }
+            }),
         showCancelButton: true,
         showCloseButton: true,
         confirmButtonColor: '#3085d6',
@@ -233,7 +272,12 @@ function download(p, l, t, ftype="PDF", isTitle=false) {
     }).then(res => {}, rej => {});
     let u;
     if(!p.startsWith("http")) {
-        u = ctx_file.format(p, l);
+        if (ftype !== "DOC") {
+            u = ctx_file.format(p, l);
+        } else {
+            u = ctx_doc.format(p, l);
+            downloadDOC(u, `Download DOC: ${p} ${t || "TITLE NOT AVAILABLE"}`, p);
+        }
     } else {
         if(p.startsWith("/")) {
             p = p.slice(1);
@@ -245,13 +289,14 @@ function download(p, l, t, ftype="PDF", isTitle=false) {
             u = ctx_file.format(p, l);
         } else {
             u = ctx_doc.format(p, l);
+            downloadDOC(u, `Download DOC: ${p} ${t || "TITLE NOT AVAILABLE"}`, p);
         }
     }
     $.get(u, data => {
         if(data.includes("There is no document matching your request")) {
             swal("下载失败",
                 "该文件不存在于联合国ODS上。",
-                "error",
+                "error"
             );
             return false;
         }
@@ -288,4 +333,14 @@ function getFileType () {
         (console.warn || console.log)("未获取到文件格式！");
         return "PDF";
     }
+}
+
+function downloadDOC (url, title, _path="") {
+    window.open(url, title);
+    $("#path").val(_path);
+    swal({
+        title: "免责声明", 
+        html: "不保证从联合国官网上下载的文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。", 
+        type: "warning"
+    });
 }

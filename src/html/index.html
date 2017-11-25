@@ -17,7 +17,7 @@
     }
 
     body {
-        overflow: hidden;
+        overflow: hidden !important;
         max-width: 942px;
         max-height: 710px;
     }
@@ -68,7 +68,7 @@
     }
 
     div.header {
-        height: 166px;
+        height: 106px;
         background: url(./logo.png) no-repeat;
         background-position: center;
     }
@@ -106,7 +106,6 @@
     <div class="header"></div>
     <div class="main">
         <span style="color: black; position: relative; left: 5px;">请选择PDF语言：</span>
-        <div style="height: 20px;"></div>
         <div>
             <input name="lang" type="radio" id="zh_CN" class="pointer" checked>
             <span class="ui">中文Chinese</span>
@@ -115,7 +114,6 @@
             <input name="lang" type="radio" id="en_US" class="pointer">
             <span class="ui">英语English</span>
         </div>
-        <br />
         <span style="position: relative; left: -30px; color: black;">具体信息（二选一）：</span>
         <br />
         <div class="userinput">
