@@ -24,7 +24,7 @@ ipcMain.on("quit", (event, code) => {
 function createWindow() {
     win = new BrowserWindow({
         width: 760, 
-        height: 540,
+        height: 530,
         icon: __dirname + '/src/html/logo.png',
         background: "#ffffff",
         show: false,
