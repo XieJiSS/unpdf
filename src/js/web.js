@@ -33,6 +33,10 @@ $.fn.extend({
     }
 });
 
+function updateUNPDF (url="http://jiejiss.xyz/unpdf-download") {
+    ipcRenderer.send("update", url);
+}
+
 function err(str, title = "出错了！") {
     return new Promise(resolve => {
         swal({
@@ -92,8 +96,7 @@ function check() {
                             cancelButtonText: "取消"
                         }).then(
                             () => {
-                                window.location.href =
-                                    "http://jiejiss.xyz/unpdf-download";
+                                updateUNPDF("http://jiejiss.xyz/unpdf-download");
                             },
                             () => {}
                         );

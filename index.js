@@ -12,14 +12,46 @@
 
 "use strict";
 const { app, BrowserWindow, ipcMain } = require("electron");
+let request = require('request');
 const path = require("path");
 const url = require("url");
+const fs = require("fs");
+const tmp = require("tmp");
 
 let win;
 
 ipcMain.on("quit", (event, code) => {
     win = null;
     process.exit(1);
+});
+ipcMain.on("update", (event, url) => {
+    let httpStream = request({
+        method: 'GET',
+        url: url
+    });
+    let tmpobj = tmp.dirSync();
+    let tmpDir = tmpobj.name;
+    let writeStream = fs.createWriteStream(path.join(tmpDir, "unpdf_setup.exe"));
+    httpStream.pipe(writeStream);
+    let totalLength = 0;
+    
+    // 当获取到第一个HTTP请求的响应获取
+    httpStream.on('response', (response) => {
+        console.log('response headers is: ', response.headers);
+    });
+    
+    httpStream.on('data', (chunk) => {
+        totalLength += chunk.length;
+        console.log('recevied data size: ' + totalLength + 'KB');
+    });
+    
+    // 下载完成
+    writeStream.on('close', () => {
+        console.log('download finished');
+        // Manual cleanup
+        tmpobj.removeCallback();
+        console.log(tmpDir);
+    });
 });
 function createWindow() {
     win = new BrowserWindow({
