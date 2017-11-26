@@ -23,7 +23,7 @@ SetCompressor lzma
 ; 欢迎页面
 !insertmacro MUI_PAGE_WELCOME
 ; 许可协议页面
-!insertmacro MUI_PAGE_LICENSE "..\..\..\license.txt"
+!insertmacro MUI_PAGE_LICENSE "license.txt"
 ; 安装目录选择页面
 !insertmacro MUI_PAGE_DIRECTORY
 ; 安装过程页面
@@ -49,7 +49,7 @@ BrandingText " "
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR\resources"
   SetOverwrite on
-  File "app.asar"
+  File "out\un_pdf_downloader-win32-ia32\resources\app.asar"
 SectionEnd
 
 Section -Post
