@@ -12,11 +12,11 @@
 
 "use strict";
 
+const { ipcRenderer } = require("electron");
 const http = require("http");
-
 const swal = require("sweetalert2");
 
-const ver = 140;
+const ver = 138;
 
 function log(str) {
     $("#log div.log").text(str);
@@ -37,6 +37,36 @@ function updateUNPDF (url="http://jiejiss.xyz/unpdf-download") {
     ipcRenderer.send("update", url);
 }
 
+var loading = $(".loading-bar");
+var speedDiv = $(".current-speed");
+var previous = 0;
+var previousTime = new Date().getTime() / 1000;
+var d = 0;
+
+ipcRenderer.on("download", (event, byteLength, totalLength) => {
+    d++;
+    var currentTime = new Date().getTime() / 1000;
+    if(currentTime - previousTime >= 1) {
+        var speed = (byteLength - previous) / (currentTime - previousTime) / 1024;
+        previous = byteLength;
+        previousTime = currentTime;
+        speedDiv.show();
+        speedDiv.html("更新包正在下载……<br />下载速度：" + speed.toFixed(2) + "KB/S");
+    }
+    loading.show();
+    loading.css("width", Math.round(Number(byteLength) / Number(totalLength) * window.innerWidth));
+});
+
+ipcRenderer.on("finish", event => {
+    speedDiv.hide();
+    loading.fadeOut();
+    swal({
+        type: "info",
+        title: "提示",
+        text: "下载完毕。请先退出UNPDF Downloader再开始安装流程。"
+    });
+});
+
 function err(str, title = "出错了！") {
     return new Promise(resolve => {
         swal({
@@ -49,8 +79,6 @@ function err(str, title = "出错了！") {
         }).then(resolve, resolve);
     });
 }
-
-const { ipcRenderer } = require("electron");
 
 function check() {
     http.get("http://jiejiss.xyz/unpdf-upload", r => {
