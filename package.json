@@ -9,6 +9,7 @@
     "author": "JieJiSS",
     "license": "Apache-2.0",
     "dependencies": {
+        "request": "^2.83.0",
         "sweetalert2": "^6.10.1",
         "tmp": "0.0.33"
     }

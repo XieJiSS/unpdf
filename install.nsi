@@ -2,7 +2,7 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "UN PDF Downloader"
-!define PRODUCT_VERSION "1.4.0"
+!define PRODUCT_VERSION "1.4.1"
 !define PRODUCT_PUBLISHER "JieJiSS"
 !define PRODUCT_WEB_SITE "http://jiejiss.xyz/unpdf"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\un_pdf_downloader.exe"

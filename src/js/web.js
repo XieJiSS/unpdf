@@ -16,7 +16,7 @@ const { ipcRenderer } = require("electron");
 const http = require("http");
 const swal = require("sweetalert2");
 
-const ver = 138;
+const ver = 141;
 
 function log(str) {
     $("#log div.log").text(str);
