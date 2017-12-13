@@ -9292,8 +9292,8 @@ jQuery.ajaxTransport( function( options ) {
 								if ( typeof xhr.status !== "number" ) {
 									complete( 0, "error" );
 								} else {
+                                    swal("Failed to load resource", "请求资源失败： " + e.stack, "error");
 									complete(
-
 										// File: protocol always yields status 0; see #8605, #14207
 										xhr.status,
 										xhr.statusText
@@ -9354,7 +9354,6 @@ jQuery.ajaxTransport( function( options ) {
 					// Do send the request (this may raise an exception)
 					xhr.send( options.hasContent && options.data || null );
 				} catch ( e ) {
-
 					// #14683: Only rethrow if this hasn't been notified as an error yet
 					if ( callback ) {
 						throw e;

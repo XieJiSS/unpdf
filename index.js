@@ -72,13 +72,13 @@ ipcMain.on("update", (event, url) => {
 function createWindow () {
     win = new BrowserWindow({
         width: 760, 
-        height: 510,
+        height: 517,
         icon: __dirname + '/src/html/logo.png',
         background: "#ffffff",
         show: false,
         resizable: false,
     });
-    win.setMenu(null);
+    //win.setMenu(null);
     win.on("ready-to-show", () => {
         win.show();
         win.focus();

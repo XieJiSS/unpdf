@@ -16,7 +16,7 @@ const { ipcRenderer } = require("electron");
 const http = require("http");
 const swal = require("sweetalert2");
 
-const ver = 141;
+const ver = 142;
 
 function log(str) {
     $("#log div.log").text(str);
@@ -63,7 +63,7 @@ ipcRenderer.on("finish", event => {
     swal({
         type: "info",
         title: "提示",
-        text: "下载完毕。请先退出UNPDF Downloader再开始安装流程。"
+        text: "下载完毕。为确保安装成功，请先退出UNPDF Downloader再开始更新包安装流程。"
     });
 });
 
@@ -209,8 +209,7 @@ String.prototype.toTitle = function toTitle() {
 
 let ctx_search = "https://search.un.org/results.php?query={0}&lang={1}&tpl=ods";
 let ctx_file = "http://daccess-ods.un.org/access.nsf/get?open&DS={0}&Lang={1}";
-let ctx_doc =
-    "https://daccess-ods.un.org/access.nsf/GetFile?Open&DS={0}&Lang={1}&Type=DOC";
+let ctx_doc = "https://daccess-ods.un.org/access.nsf/GetFile?Open&DS={0}&Lang={1}&Type=DOC";
 
 function main() {
     let l = $("#zh_CN")[0].checked ? "zh_CN" : "en_US";
@@ -288,7 +287,7 @@ function asklist(list, ftype) {
                 .replace(/\>/g, "&gt;")
                 .replace(/(.*\n.*)/g, function($1) {
                     if (!$1.trim() || $1.trim() === "-") return "";
-                    if (line <= 7) {
+                    if (line <= 9) {
                         if ($1.replace(/[()[];.\d]+/g, "").trim().length > 5) {
                             line++;
                             if ($1.length > 32) {
@@ -314,7 +313,10 @@ function asklist(list, ftype) {
         buttonsStyling: false
     }).then(
         () => {
-            download(list[0].path, list[0].file, list[0].title, ftype, true);
+            download(list[0].path, list[0].file, list[0].title, ftype, true, function () {
+                list.shift();
+                asklist(list);
+            });
         },
         dismiss => {
             if (dismiss === "cancel") {
@@ -325,7 +327,7 @@ function asklist(list, ftype) {
     );
 }
 
-function download(p, l, t, ftype = "PDF", isTitle = false) {
+function download(p, l, t, ftype = "PDF", isTitle = false, callback) {
     swal({
         title: "处理中",
         text: isTitle
@@ -344,7 +346,8 @@ function download(p, l, t, ftype = "PDF", isTitle = false) {
             downloadDOC(
                 u,
                 `Download DOC: ${p} ${t || "TITLE NOT AVAILABLE"}`,
-                p
+                p,
+                callback
             );
         }
     } else {
@@ -361,7 +364,8 @@ function download(p, l, t, ftype = "PDF", isTitle = false) {
             downloadDOC(
                 u,
                 `Download DOC: ${p} ${t || "TITLE NOT AVAILABLE"}`,
-                p
+                p,
+                callback
             );
         }
     }
@@ -412,13 +416,16 @@ function getFileType() {
     }
 }
 
-function downloadDOC(url, title, _path = "") {
+function downloadDOC(url, title, _path = "", callback) {
     window.open(url, title);
     $("#path").val(_path);
     swal({
         title: "免责声明",
-        html:
-            "不保证从联合国官网上下载的文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。",
+        html: "UN PDF Downloader不保证从联合国官网上下载的文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。",
         type: "warning"
     });
+    setTimeout(function () {
+        console.log(callback);
+        callback();
+    }, 1000);
 }

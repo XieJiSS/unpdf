@@ -8,7 +8,6 @@
     <style>
     html {
         font-size: 28px;
-        font-family: "Courier New", monospace;
         background: white;
         color: #888;
         -webkit-user-select: none;
@@ -84,10 +83,14 @@
         text-align: center;
     }
 
+    .log {
+        font-family: "Courier New";
+    }
+
     input.pointer {
         cursor: pointer;
         position: relative;
-        left: 15px;
+        left: 22px;
     }
 
     .au {
@@ -112,6 +115,25 @@
         font-size: 13px;
         color: #333;
     }
+
+    span.eng {
+        font-family: "Courier New";
+        font-weight: bold;
+    }
+
+    .beautiful {
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    }
+
+    a.beautifulA {
+        color: rgb(0, 137, 187);
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        text-decoration: none;
+    }
+
+    .leftpad {
+        margin-left: 13px;
+    }
     </style>
     <link rel="stylesheet" href="../css/swal.css" />
     <link rel="stylesheet" href="../css/button.css" />
@@ -127,14 +149,14 @@
         <div class="current-speed" style="display: none;"></div>
     </div>
     <div class="main">
-        <span style="color: black; position: relative; left: 5px;">请选择PDF语言：</span>
+        <span style="color: black; position: relative; left: calc(7px + 1em);">文件语言：</span>
         <div>
             <input name="lang" type="radio" id="zh_CN" class="pointer" checked>
-            <span class="ui">中文Chinese</span>
+            <span class="ui leftpad">中文<span class="eng">Chinese</span></span>
         </div>
         <div>
             <input name="lang" type="radio" id="en_US" class="pointer">
-            <span class="ui">英语English</span>
+            <span class="ui leftpad">英语<span class="eng">English</span></span>
         </div>
         <span style="position: relative; left: -30px; color: black;">具体信息（二选一）：</span>
         <br />
@@ -146,16 +168,16 @@
         </div>
         <div>
             <input name="ftype" type="radio" id="d_pdf" class="pointer" checked>
-            <span class="ui">下载PDF文档</span>
+            <span class="ui leftpad">下载<span class="eng">PDF</span>文档</span>
         </div>
         <div>
             <input name="ftype" type="radio" id="d_doc" class="pointer">
-            <span class="ui">下载Word文档</span>
+            <span class="ui leftpad">下载<span class="eng">Word</span>文档</span>
         </div>
         <a href="#" id="submit" class="button1">Download</a>
     </div>
     <div id="log">
-        <div class="au">来自心累无比的G171117 - PRZ（逃</div>
+        <div class="au beautiful">来自清华附中G171117 - <a href="mailto:g171117@126.com" class="beautifulA">PRZ</a></div>
         <div class="log"></div>
     </div>
     <script src="../js/web.js"></script>
