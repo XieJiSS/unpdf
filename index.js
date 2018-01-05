@@ -27,6 +27,8 @@ ipcMain.on("quit", (event, code) => {
 
 let httpStream;
 
+const DEBUG = process.env["UNPDF_DEBUG"] === "true";
+
 ipcMain.on("update", (event, url) => {
     httpStream = request({
         method: 'GET',
@@ -72,13 +74,19 @@ ipcMain.on("update", (event, url) => {
 function createWindow () {
     win = new BrowserWindow({
         width: 760, 
-        height: 517,
+        height: DEBUG ? 537: 517,
         icon: __dirname + '/src/html/logo.png',
         background: "#ffffff",
         show: false,
         resizable: false,
     });
-    //win.setMenu(null);
+    
+    if(!DEBUG) {
+        win.setMenu(null);
+    } else {
+        win.webContents.openDevTools();
+    }
+    
     win.on("ready-to-show", () => {
         win.show();
         win.focus();

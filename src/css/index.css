@@ -1,0 +1,140 @@
+html {
+    font-size: 28px;
+    background: white;
+    color: #888;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+body {
+    overflow: hidden !important;
+    max-width: 942px;
+    max-height: 710px;
+}
+
+input {
+    font-size: 0.7em;
+}
+
+.main {
+    position: relative;
+    left: 264px;
+}
+
+.userinput {
+    position: relative;
+    left: -50px;
+}
+
+.ui {
+    font-size: 75%;
+}
+
+input {
+    display: inline-block;
+    cursor: text;
+}
+
+input.short {
+    width: 210px;
+}
+
+a.button1 {
+    position: relative;
+    top: 15px;
+    left: 23px;
+    text-decoration: none;
+    border: 1px solid #3a3a3a;
+    font-size: 110%;
+    color: #4d4d4d;
+    padding: 6px 12px;
+    border-radius: 3px;
+    background: white;
+    font-family: Consolas;
+}
+
+a.button1:hover {
+    background: #ddd;
+}
+
+div.header {
+    height: 106px;
+    background: url(../html/logo.png) no-repeat;
+    background-position: center;
+}
+
+input::-webkit-input-placeholder {
+    color: #c2c2c2;
+    opacity: 1;
+}
+
+#log {
+    font-size: 0.4em;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.log {
+    font-family: "Courier New";
+}
+
+input.pointer {
+    cursor: pointer;
+    position: relative;
+    left: 22px;
+}
+
+.au {
+    font-size: 150%;
+}
+
+.loading-bar,
+.current-speed {
+    position: absolute;
+    z-index: 100;
+}
+
+.loading-bar {
+    left: 0;
+    top: 0;
+    background-color: #888;
+    height: 3px;
+}
+
+.current-speed {
+    left: 3px;
+    top: 5px;
+    font-size: 13px;
+    color: #333;
+}
+
+span.eng {
+    font-family: "Courier New";
+    font-weight: bold;
+}
+
+.beautiful {
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
+}
+
+a.beautifulA {
+    color: rgb(0, 137, 187);
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
+    text-decoration: none;
+}
+
+.leftpad {
+    margin-left: 13px;
+}
+
+.feedback {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 3px;
+    font-size: 1.2em;
+    background-color: #e3e3e3;
+}

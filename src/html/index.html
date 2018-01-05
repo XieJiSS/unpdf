@@ -5,136 +5,7 @@
     <meta name="viewport" content="width=800, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>UN PDF Downloader</title>
-    <style>
-    html {
-        font-size: 28px;
-        background: white;
-        color: #888;
-        -webkit-user-select: none;
-        user-select: none;
-        cursor: default;
-    }
-
-    body {
-        overflow: hidden !important;
-        max-width: 942px;
-        max-height: 710px;
-    }
-
-    input {
-        font-size: 0.7em;
-    }
-
-    .main {
-        position: relative;
-        left: 264px;
-    }
-
-    .userinput {
-        position: relative;
-        left: -50px;
-    }
-
-    .ui {
-        font-size: 75%;
-    }
-
-    input {
-        display: inline-block;
-        cursor: text;
-    }
-
-    input.short {
-        width: 210px;
-    }
-
-    a.button1 {
-        position: relative;
-        top: 15px;
-        left: 23px;
-        text-decoration: none;
-        border: 1px solid #3A3A3A;
-        font-size: 110%;
-        color: #4D4D4D;
-        padding: 6px 12px;
-        border-radius: 3px;
-        background: white;
-        font-family: Consolas;
-    }
-
-    a.button1:hover {
-        background: #ddd;
-    }
-
-    div.header {
-        height: 106px;
-        background: url(./logo.png) no-repeat;
-        background-position: center;
-    }
-
-    input::-webkit-input-placeholder {
-        color: #C2C2C2;
-        opacity: 1;
-    }
-
-    #log {
-        font-size: 0.4em;
-        margin-top: 30px;
-        text-align: center;
-    }
-
-    .log {
-        font-family: "Courier New";
-    }
-
-    input.pointer {
-        cursor: pointer;
-        position: relative;
-        left: 22px;
-    }
-
-    .au {
-        font-size: 150%;
-    }
-
-    .loading-bar, .current-speed {
-        position: absolute;
-        z-index: 100;
-    }
-
-    .loading-bar {
-        left: 0;
-        top: 0;
-        background-color: #888;
-        height: 3px;
-    }
-
-    .current-speed {
-        left: 3px;
-        top: 5px;
-        font-size: 13px;
-        color: #333;
-    }
-
-    span.eng {
-        font-family: "Courier New";
-        font-weight: bold;
-    }
-
-    .beautiful {
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    }
-
-    a.beautifulA {
-        color: rgb(0, 137, 187);
-        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        text-decoration: none;
-    }
-
-    .leftpad {
-        margin-left: 13px;
-    }
-    </style>
+    <link rel="stylesheet" href="../css/index.css" />
     <link rel="stylesheet" href="../css/swal.css" />
     <link rel="stylesheet" href="../css/button.css" />
     <link rel="stylesheet" href="../css/animate.css" />
@@ -177,9 +48,11 @@
         <a href="#" id="submit" class="button1">Download</a>
     </div>
     <div id="log">
-        <div class="au beautiful">来自清华附中G171117 - <a href="mailto:g171117@126.com" class="beautifulA">PRZ</a></div>
+        <div class="au beautiful">来自清华附中G171117 - PRZ</div>
+        <div class="au beautiful feedback"><a href="mailto:g171117@126.com" class="beautifulA">反馈问题</a></div>
         <div class="log"></div>
     </div>
+    <script src="../js/feedback.js"></script>
     <script src="../js/web.js"></script>
 </body>
 </html>

@@ -14,13 +14,16 @@
 
 const { ipcRenderer } = require("electron");
 const http = require("http");
-const swal = require("sweetalert2");
 
 const ver = 142;
+
+window.UNPDF_VERSION = ver; // for feedback.js
 
 function log(str) {
     $("#log div.log").text(str);
 }
+
+function emptyCallback() {}
 
 $.fn.extend({
     rubberBand: function() {
@@ -33,7 +36,7 @@ $.fn.extend({
     }
 });
 
-function updateUNPDF (url="http://jiejiss.xyz/unpdf-download") {
+function updateUNPDF(url="http://jiejiss.xyz/unpdf-download") {
     ipcRenderer.send("update", url);
 }
 
@@ -373,9 +376,17 @@ function download(p, l, t, ftype = "PDF", isTitle = false, callback) {
         if (data.includes("There is no document matching your request")) {
             swal("下载失败", "该文件不存在于联合国ODS上。", "error");
             return false;
+        } else if(data.includes("Error 91: Object variable not set")) {
+            swal("下载失败", "该DOC文件不存在于联合国ODS上。", "error");
+            return false;
         }
-        let redir = data.split("URL=")[1].split('">')[0];
-        log("Redirecting to " + redir + "...");
+        let partialHTML = data.split("URL=")[1];
+        if(!partialHTML) {
+            swal("出错了！", "文件下载失败：这可能是因为联合国ODS上没有这份文件。", "error");
+            return false;
+        }
+        let redir = partialHTML.split('">')[0];
+        log("正在跳转到" + redir + "，请稍候……");
         let w = window.open(
             "https://daccess-ods.un.org" + redir,
             `Download PDF: ${p} ${t || "TITLE NOT AVAILABLE"}`
@@ -417,6 +428,7 @@ function getFileType() {
 }
 
 function downloadDOC(url, title, _path = "", callback) {
+    callback = callback || emptyCallback;
     window.open(url, title);
     $("#path").val(_path);
     swal({
@@ -425,7 +437,6 @@ function downloadDOC(url, title, _path = "", callback) {
         type: "warning"
     });
     setTimeout(function () {
-        console.log(callback);
         callback();
     }, 1000);
 }
