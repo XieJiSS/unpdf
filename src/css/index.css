@@ -146,14 +146,14 @@ input.pointer {
 
 .loading-bar {
     left: 0;
-    top: 0;
+    top: 28px;
     background-color: #888;
     height: 3px;
 }
 
 .current-speed {
     left: 3px;
-    top: 5px;
+    top: 33px;
     font-size: 13px;
     color: #333;
 }
