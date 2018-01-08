@@ -71,14 +71,25 @@ ipcMain.on("update", (event, url) => {
         });
     });
 });
+
+ipcMain.on("minify", function () {
+    win.minimize();
+});
+
+ipcMain.on("close-window", function () {
+    win.close();
+});
+
 function createWindow () {
     win = new BrowserWindow({
         width: 760, 
-        height: DEBUG ? 537: 517,
-        icon: __dirname + '/src/html/logo.png',
+        height: 517,
+        icon: path.join(__dirname, 'small_icon.ico'),
         background: "#ffffff",
         show: false,
         resizable: false,
+        frame: false,
+        transparent: true,
     });
     
     if(!DEBUG) {

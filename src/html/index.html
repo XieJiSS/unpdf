@@ -10,11 +10,17 @@
     <link rel="stylesheet" href="../css/button.css" />
     <link rel="stylesheet" href="../css/animate.css" />
 </head>
-<body>
+<body style="visibility: hidden;">
+<div class="bg" style="background: rgba(255, 255, 255, 1);">
     <script src="../js/jquery-3.0.0.js"></script>
     <script>
     window.addEventListener("mousewheel", e => e.preventDefault(), { passive: false });
     </script>
+    <div class="control-bar">
+        <span class="control control-title" id="control-title">UN PDF Downloader</span>
+        <div class="control control-min"></div>
+        <div class="control control-close"></div>
+    </div>
     <div class="header">
         <div class="loading-bar" style="display: none;"></div>
         <div class="current-speed" style="display: none;"></div>
@@ -48,11 +54,13 @@
         <a href="#" id="submit" class="button1">Download</a>
     </div>
     <div id="log">
-        <div class="au beautiful">来自清华附中G171117 - PRZ</div>
-        <div class="au beautiful feedback"><a href="mailto:g171117@126.com" class="beautifulA">反馈问题</a></div>
+        <div class="au beautiful">来自清华附中G171117 - PRZ<div class="au beautiful feedback"><a href="mailto:g171117@126.com" class="beautifulA">反馈问题</a></div></div>
+        
         <div class="log"></div>
     </div>
+    <script src="../js/bars.js"></script>
     <script src="../js/feedback.js"></script>
     <script src="../js/web.js"></script>
+</div>
 </body>
 </html>

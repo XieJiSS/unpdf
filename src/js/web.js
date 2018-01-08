@@ -6,16 +6,15 @@
 /*   By: JieJiSS <c141028@protonmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 14:59:30 by JieJiSS           #+#    #+#             */
-/*   Updated: 2017/11/25 14:59:30 by JieJiSS          ###   ########.fr       */
+/*   Updated: 2018/01/08 21:20:58 by JieJiSS          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 "use strict";
 
-const { ipcRenderer } = require("electron");
 const http = require("http");
 
-const ver = 142;
+const ver = 150;
 
 window.UNPDF_VERSION = ver; // for feedback.js
 
@@ -111,16 +110,19 @@ function check() {
                     if (info.ver > ver) {
                         document.title += ` v${String(ver)
                             .split("")
-                            .join(".")}`;
+                            .join(".")}（有新版本）`;
+                        $("#control-title").text(document.title);
                         swal({
-                            title: "更新",
-                            text: `有新版本：当前版本v${ver
+                            title: "新版本",
+                            html: `当前版本v${ver
                                 .toString()
                                 .split("")
-                                .join(".")}，新版本为v${info.ver
+                                .join(".")}<br>新版本为v${info.ver
                                 .toString()
                                 .split("")
-                                .join(".")}`,
+                                .join(".")}<br>${
+                                    info.str ? "更新内容：" + info.str : ""
+                                }`,
                             type: "info",
                             confirmButtonText: "下载",
                             showCancelButton: true,
@@ -136,10 +138,12 @@ function check() {
                             .split("")
                             .join(".")}`;
                         document.title += " Beta";
+                        $("#control-title").text(document.title);
                     } else {
                         document.title += ` v${String(ver)
                             .split("")
                             .join(".")}`;
+                        $("#control-title").text(document.title);
                     }
                 } catch (e) {
                     console.error(e.message);

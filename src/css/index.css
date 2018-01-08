@@ -1,6 +1,5 @@
 html {
     font-size: 28px;
-    background: white;
     color: #888;
     -webkit-user-select: none;
     user-select: none;
@@ -11,6 +10,18 @@ body {
     overflow: hidden !important;
     max-width: 942px;
     max-height: 710px;
+    background: rgba(0, 0, 0, 0);
+}
+
+div.bg {
+    -webkit-app-region: no-drag;
+    transition: background 1s;
+    -moz-transition: background 1s;
+    -webkit-transition: background 1s;
+    -o-transition: background 1s;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 10px;
+    position: absolute;
 }
 
 input {
@@ -89,6 +100,44 @@ input.pointer {
     font-size: 150%;
 }
 
+.control-bar {
+    height: 28px;
+    -webkit-app-region: drag;
+    width: 100%;
+}
+.control {
+    height: 15px;
+    margin: 4.5px 4.5px;
+    width: 15px;
+    position: absolute;
+    border-radius: 9px;
+    cursor: pointer;
+}
+.control-min {
+    -webkit-app-region: no-drag;
+    background-color: rgb(156, 156, 156);
+    right: 26px;
+}
+.control-min:hover {
+    background-color: rgb(122, 122, 122);
+}
+.control-close {
+    -webkit-app-region: no-drag;
+    background-color: rgb(228, 82, 60);
+    right: 4px;
+}
+.control-close:hover {
+    background-color: rgb(234, 32, 0);
+}
+.control-title {
+    font-size: 12px;
+    width: 600px;
+    padding-left: 4px;
+    color: rgb(36, 36, 36);
+    font-family: "Microsoft YaHei";
+    cursor: default;
+}
+
 .loading-bar,
 .current-speed {
     position: absolute;
@@ -131,10 +180,8 @@ a.beautifulA {
 }
 
 .feedback {
-    position: absolute;
-    right: 0;
-    top: 0;
     padding: 3px;
-    font-size: 1.2em;
-    background-color: #e3e3e3;
+    font-size: 1em;
+    padding-left: 8px;
+    display: inline-block;
 }
