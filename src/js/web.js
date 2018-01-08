@@ -14,7 +14,7 @@
 
 const http = require("http");
 
-const ver = 140;
+const ver = 150;
 
 window.UNPDF_VERSION = ver; // for feedback.js
 
