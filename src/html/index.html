@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="../css/swal.css" />
     <link rel="stylesheet" href="../css/button.css" />
     <link rel="stylesheet" href="../css/animate.css" />
+    <script src="./js/jquery-1.7.1.js"></script>
+    <script src="./js/alphabet.js"></script>
+    <script type="text/javascript" src="./js/head.js"></script>
+    <script>
+    const ver = 151;
+    window.UNPDF_VERSION = ver; // for feedback.js
+    </script>
 </head>
 <body style="visibility: hidden;">
 <div class="bg" style="background: rgba(255, 255, 255, 1);">
@@ -18,8 +25,8 @@
     </script>
     <div class="control-bar">
         <span class="control control-title" id="control-title">UN PDF Downloader</span>
-        <div class="control control-min"></div>
-        <div class="control control-close"></div>
+        <div class="control control-min" title="最小化"></div>
+        <div class="control control-close" title="关闭"></div>
     </div>
     <div class="header">
         <div class="loading-bar" style="display: none;"></div>
@@ -38,11 +45,28 @@
         <span style="position: relative; left: -30px; color: black;">具体信息（二选一）：</span>
         <br />
         <div class="userinput">
-            <span class="ui">关键词：</span><input id="search" type="text" class="short" placeholder="关键词语">
+            <span class="ui">关键词：</span><div id="search" class="short" contenteditable="true"></div>
         </div>
         <div class="userinput">
-            <span class="ui">文件号：</span><input id="path" type="text" class="short" placeholder="文件路径">
+            <span class="ui">文件号：</span><div id="path" class="short" contenteditable="true"></div>
         </div>
+        <script>
+        var divs = $(".short").toArray();
+        divs.forEach(div => {
+            div.addEventListener("paste", ev => {
+                var target = ev.target;
+                var arr = target.innerText.split("").filter(s => {
+                    return s.charCodeAt(0) !== 10 && s.charCodeAt(0) !== 13;
+                });
+                target.innerText = arr.join("").replace(/\n+/mg, "");
+            });
+            div.addEventListener("keydown", ev => {
+                if(ev.keyCode === 13) {
+                    ev.preventDefault();
+                }
+            });
+        });
+        </script>
         <div>
             <input name="ftype" type="radio" id="d_pdf" class="pointer" checked>
             <span class="ui leftpad">下载<span class="eng">PDF</span>文档</span>
@@ -54,7 +78,7 @@
         <a href="#" id="submit" class="button1">Download</a>
     </div>
     <div id="log">
-        <div class="au beautiful">来自清华附中G171117 - PRZ<div class="au beautiful feedback"><a href="mailto:g171117@126.com" class="beautifulA">反馈问题</a></div></div>
+        <div class="au beautiful">来自清华附中G171117 - PRZ<div class="au beautiful feedback"><a href="#" class="beautifulA">反馈问题</a></div></div>
         
         <div class="log"></div>
     </div>
@@ -62,5 +86,7 @@
     <script src="../js/feedback.js"></script>
     <script src="../js/web.js"></script>
 </div>
+<canvas id="myCanvas" class="my-logo" height="80" width="150" style="opacity: 0;">JieJiSS</canvas>
+<script type="text/javascript" src="./js/main.js"></script>
 </body>
 </html>

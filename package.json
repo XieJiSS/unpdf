@@ -1,6 +1,6 @@
 {
     "name": "un_pdf_downloader",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "description": "UN PDF Downloader",
     "main": "index.js",
     "scripts": {

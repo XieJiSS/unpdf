@@ -2,8 +2,8 @@
 
 const { ipcRenderer } = require("electron");
 
-$("div.bg").css("height", window.innerHeight - 10);
-$("div.bg").css("width", window.innerWidth - 10);
+$("div.bg").css("height", window.innerHeight - 2);
+$("div.bg").css("width", window.innerWidth - 2);
 
 setTimeout(function () {
     $(document.body).css("visibility", "visible");
@@ -24,8 +24,10 @@ $(".control-close").click(function () {
 
 function _focus() {
     $("div.bg").css("background", "rgba(255, 255, 255, 1)");
+    $("canvas#myCanvas").css("opacity", "0");
 }
 
 function _blur() {
     $("div.bg").css("background", "rgba(255, 255, 255, 0.75)");
+    $("canvas#myCanvas").css("opacity", "1");
 }

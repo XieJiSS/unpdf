@@ -6,18 +6,14 @@
 /*   By: JieJiSS <c141028@protonmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 14:59:30 by JieJiSS           #+#    #+#             */
-/*   Updated: 2018/01/08 21:20:58 by JieJiSS          ###   ########.fr       */
+/*   Updated: 2018/01/09 22:56:42 by JieJiSS          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 "use strict";
 
 const http = require("http");
-
-const ver = 150;
-
-window.UNPDF_VERSION = ver; // for feedback.js
-
+//@TODO: 当搜索结果为空时，显示提示消息。
 function log(str) {
     $("#log div.log").text(str);
 }
@@ -220,15 +216,15 @@ let ctx_doc = "https://daccess-ods.un.org/access.nsf/GetFile?Open&DS={0}&Lang={1
 
 function main() {
     let l = $("#zh_CN")[0].checked ? "zh_CN" : "en_US";
-    let vp = $("#path").val() || "";
-    let vs = $("#search").val() || "";
+    let vp = $("#path").text() || "";
+    let vs = $("#search").text() || "";
     let ftype = getFileType();
     if (vp.trim()) {
         $("#search")[0].parentNode.style = "";
-        download($("#path").val(), languages[l].file, vp, ftype);
+        download($("#path").text(), languages[l].file, vp, ftype);
     } else if (vs.trim()) {
         $("#search")[0].parentNode.style = "";
-        search($("#search").val(), languages[l], ftype);
+        search($("#search").text(), languages[l], ftype);
     } else {
         $("#search")[0].parentNode.style = "color: red;";
     }
@@ -242,12 +238,11 @@ function search(str, language, ftype) {
             err("没有搜索到相关信息。");
             return false;
         }
-        let html = document.createElement("html");
-        html.innerHTML = data;
-        let doc = html;
-        let nodes = doc.querySelectorAll("div#search-results article");
+        let htmlNode = document.createElement("html");
+        htmlNode.innerHTML = data;
+        let nodes = htmlNode.querySelectorAll("div#search-results article");
         for (var i = 0; i < nodes.length; i++) {
-            console.log(nodes[i].innerHTML);
+            //console.log(nodes[i].innerHTML);
             let fix = nodes[i].innerHTML.split(
                 '<div style="font-weight: bold; border-bottom: 0; font-size:1em; color: #005778">'
             )[1];
@@ -395,7 +390,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, callback) {
             "https://daccess-ods.un.org" + redir,
             `Download PDF: ${p} ${t || "TITLE NOT AVAILABLE"}`
         );
-        $("#path").val(p);
+        $("#path").text(p);
         if (isTitle) {
             let divNode = $("<div>").text(`文件路径为${p}`);
             $("<br>").appendTo($("div#swal2-content"));
@@ -406,7 +401,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, callback) {
     });
 }
 
-$("input#path")[0].addEventListener(
+$("#path")[0].addEventListener(
     "keydown",
     ev => {
         if ((ev.code || ev.keyCode) === 13 || ev.key === "Enter") {
@@ -426,7 +421,8 @@ function getFileType() {
     } else if (doc) {
         return "DOC";
     } else {
-        (console.warn || console.log)("未获取到文件格式！");
+        (console.warn || console.log)("获取文件格式失败，fallback到PDF");
+        window.LAST_ERROR_EVENT = "web::getFileType@L426 " + [pdf, doc].join();
         return "PDF";
     }
 }
@@ -434,7 +430,7 @@ function getFileType() {
 function downloadDOC(url, title, _path = "", callback) {
     callback = callback || emptyCallback;
     window.open(url, title);
-    $("#path").val(_path);
+    $("#path").text(_path);
     swal({
         title: "免责声明",
         html: "UN PDF Downloader不保证从联合国官网上下载的文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。",
