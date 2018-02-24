@@ -17,6 +17,8 @@ function log(str) {
     $("#log div.log").text(str);
 }
 
+let CACHE = Object.create(null);
+
 function emptyCallback() {}
 
 const noop = emptyCallback;
@@ -379,7 +381,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
             );
         }
     }
-    setTimeout(function () {
+    CACHE.inter = setTimeout(function () {
         swal({
             input: 'text',
             html: '自动生成的引用文字（请仔细检查，仅供参考）<div title="他们是：张馨怡，任梓彰，吴开元和王子轩；排名不分先后">感谢我在BJMUNC18 UNDPen的主席们启发</div>',
@@ -399,14 +401,20 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
     $.get(u, data => {
         if (data.includes("There is no document matching your request")) {
             swal("下载失败", "该文件不存在于联合国ODS上。", "error");
+            clearTimeout(CACHE.inter);
+            CACHE.inter = null;
             return false;
         } else if(data.includes("Error 91: Object variable not set")) {
             swal("下载失败", "该DOC文件不存在于联合国ODS上。", "error");
+            clearTimeout(CACHE.inter);
+            CACHE.inter = null;
             return false;
         }
         let partialHTML = data.split("URL=")[1];
         if(!partialHTML) {
             swal("出错了！", "文件下载失败：这可能是因为联合国ODS上没有这份文件。", "error");
+            clearTimeout(CACHE.inter);
+            CACHE.inter = null;
             return false;
         }
         let redir = partialHTML.split('">')[0];
@@ -447,7 +455,7 @@ function getFileType() {
         return "DOC";
     } else {
         (console.warn || console.log)("获取文件格式失败，fallback到PDF");
-        window.LAST_ERROR_EVENT = "web::getFileType@L426 " + [pdf, doc].join();
+        window.LAST_ERROR_EVENT = "Failed to get file type: web::getFileType@L450 " + [pdf, doc].join();
         return "PDF";
     }
 }
@@ -478,38 +486,38 @@ function getEngCommitteeName (path="") {
         let next = path.split("/")[1];
         switch (next) {
             case "C.1":
-                return "UN General Assembly First Committee";
+                return "United Nations General Assembly First Committee";
             case "C.2":
-                return "UN General Assembly Second Committee";
+                return "United Nations General Assembly Second Committee";
             case "C.3":
-                return "UN General Assembly Third Committee";
+                return "United Nations General Assembly Third Committee";
             case "C.4":
-                return "UN General Assembly Fourth Committee";
+                return "United Nations General Assembly Fourth Committee";
             case "C.5":
-                return "UN General Assembly Fifth Committee";
+                return "United Nations General Assembly Fifth Committee";
             case "C.6":
-                return "UN General Assembly Sixth Committee";
+                return "United Nations General Assembly Sixth Committee";
             case "HRC":
-                return "UN Human Rights Council";
+                return "United Nations Human Rights Council";
             default:
-                return "UN General Assembly";
+                return "United Nations General Assembly";
         }
     }
     switch (start) {
         case "S":
-            return "UN Security Council";
+            return "United Nations Security Council";
         case "E":
-            return "UN Economic and Social Council";
+            return "United Nations Economic and Social Council";
         case "ST":
-            return "UN Secretariat";
+            return "United Nations Secretariat";
         case "AT":
-            return "UN Administrative Tribunal";
+            return "United Nations Administrative Tribunal";
         case "APLC":
-            return "UN Anti Personnel Landmine Convention";
+            return "United Nations Anti Personnel Landmine Convention";
         case "UNEP":
-            return "UN Environment Programme";
+            return "United Nations Environment Programme";
         case "FCCC":
-            return "UN Framework Convention on Climate Change";
+            return "United Nations Framework Convention on Climate Change";
         default:
             return "United Nations";
     }
