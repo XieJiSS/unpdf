@@ -45,15 +45,13 @@ input {
 }
 
 div.short {
-    min-width: 210px;
-    max-width: 240px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    width: 210px;
     display: inline-block;
     cursor: text;
     border-bottom: 1px solid rgba(235, 235, 235, 0.8);
     font-size: 21px;
     color: black;
+    overflow: hidden;
     transition: border-bottom .4s;
     -webkit-transition: border-bottom .4s;
     white-space: nowrap;
@@ -225,4 +223,9 @@ a.beautifulA {
     -moz-transition: opacity .8s;
     -webkit-transition: opacity .8s;
     -o-transition: opacity .8s;
+}
+
+.swal2-input {
+    font-family: Consolas;
+    font-size: 13px;
 }

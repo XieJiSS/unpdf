@@ -13,12 +13,13 @@
 "use strict";
 
 const http = require("http");
-//@TODO: 当搜索结果为空时，显示提示消息。
 function log(str) {
     $("#log div.log").text(str);
 }
 
 function emptyCallback() {}
+
+const noop = emptyCallback;
 
 $.fn.extend({
     rubberBand: function() {
@@ -213,6 +214,8 @@ String.prototype.toTitle = function toTitle() {
 let ctx_search = "https://search.un.org/results.php?query={0}&lang={1}&tpl=ods";
 let ctx_file = "http://daccess-ods.un.org/access.nsf/get?open&DS={0}&Lang={1}";
 let ctx_doc = "https://daccess-ods.un.org/access.nsf/GetFile?Open&DS={0}&Lang={1}&Type=DOC";
+let ctx_ref = "{0}, {1}, {2}, {3}, available at: https://undocs.org/{3} [accessed {4}]"; //委员会名称，标题，发布时间，文件路径，当前日期
+let ctx_refworld = "http://www.refworld.org/cgi-bin/texis/vtx/rwmain?page=search&skip=0&query={0}"; //文件标题
 
 function main() {
     let l = $("#zh_CN")[0].checked ? "zh_CN" : "en_US";
@@ -315,7 +318,8 @@ function asklist(list, ftype) {
         buttonsStyling: false
     }).then(
         () => {
-            download(list[0].path, list[0].file, list[0].title, ftype, true, function () {
+            let fdate = getPublishDate(list[0].file, list[0].about);
+            download(list[0].path, list[0].file, list[0].title, ftype, true, fdate, function () {
                 list.shift();
                 asklist(list);
             });
@@ -329,15 +333,19 @@ function asklist(list, ftype) {
     );
 }
 
-function download(p, l, t, ftype = "PDF", isTitle = false, callback) {
+function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发布日期", callback) {
+    let lang = l === "C" ? "中文" : "英文";
     swal({
         title: "处理中",
         text: isTitle
-            ? `正在尝试下载${t}，格式为${ftype}……`
-            : `正在尝试下载${t}号文件，格式为${ftype}……`,
+            ? `正在尝试下载${t}，语言为${lang}，格式为${ftype}……`
+            : `正在尝试下载${t}号文件，语言为${lang}，格式为${ftype}……`,
         timer: 5000,
         type: "info",
-        allowOutsideClick: false
+        allowOutsideClick: false,
+        onOpen: () => {
+            swal.showLoading()
+        }
     }).then(res => {}, rej => {});
     let u;
     if (!p.startsWith("http")) {
@@ -371,6 +379,23 @@ function download(p, l, t, ftype = "PDF", isTitle = false, callback) {
             );
         }
     }
+    setTimeout(function () {
+        swal({
+            input: 'text',
+            html: '自动生成的引用文字（请仔细检查，仅供参考）<div title="他们是：张馨怡，任梓彰，吴开元和王子轩；排名不分先后">感谢我在BJMUNC18 UNDPen的主席们启发</div>',
+            confirmButtonText: '复制',
+            showCancelButton: true,
+            inputValue: ctx_ref.format(getCommittee(l, p), t, filedate, p, getDateStr()),
+            reverseButtons: true,
+            preConfirm () {
+                $(".swal2-input")[0].select();
+                document.execCommand("copy");
+                return new Promise(res => {
+                    res(true);
+                });
+            }
+        }).then(res => {}, rej => {});
+    }, 5200);
     $.get(u, data => {
         if (data.includes("There is no document matching your request")) {
             swal("下载失败", "该文件不存在于联合国ODS上。", "error");
@@ -439,4 +464,113 @@ function downloadDOC(url, title, _path = "", callback) {
     setTimeout(function () {
         callback();
     }, 1000);
+}
+
+function getCommittee(lang, path) {
+    if(lang === "C")
+        return getChnCommitteeName(path);
+    else return getEngCommitteeName(path);
+}
+
+function getEngCommitteeName (path="") {
+    let start = path.split("/")[0];
+    if(start === "A") {
+        let next = path.split("/")[1];
+        switch (next) {
+            case "C.1":
+                return "UN General Assembly First Committee";
+            case "C.2":
+                return "UN General Assembly Second Committee";
+            case "C.3":
+                return "UN General Assembly Third Committee";
+            case "C.4":
+                return "UN General Assembly Fourth Committee";
+            case "C.5":
+                return "UN General Assembly Fifth Committee";
+            case "C.6":
+                return "UN General Assembly Sixth Committee";
+            case "HRC":
+                return "UN Human Rights Council";
+            default:
+                return "UN General Assembly";
+        }
+    }
+    switch (start) {
+        case "S":
+            return "UN Security Council";
+        case "E":
+            return "UN Economic and Social Council";
+        case "ST":
+            return "UN Secretariat";
+        case "AT":
+            return "UN Administrative Tribunal";
+        case "APLC":
+            return "UN Anti Personnel Landmine Convention";
+        case "UNEP":
+            return "UN Environment Programme";
+        case "FCCC":
+            return "UN Framework Convention on Climate Change";
+        default:
+            return "United Nations";
+    }
+}
+
+function getChnCommitteeName (path="") {
+    let start = path.split("/")[0];
+    if(start === "A") {
+        let next = path.split("/")[1];
+        switch (next) {
+            case "C.1":
+                return "联合国大会第一委员会";
+            case "C.2":
+                return "联合国大会第二委员会";
+            case "C.3":
+                return "联合国大会第三委员会";
+            case "C.4":
+                return "联合国大会第四委员会";
+            case "C.5":
+                return "联合国大会第五委员会";
+            case "C.6":
+                return "联合国大会第六委员会";
+            case "HRC":
+                return "联合国人权理事会";
+            default:
+                return "联合国大会";
+        }
+    }
+    switch (start) {
+        case "S":
+            return "联合国安全理事会";
+        case "E":
+            return "联合国经济和社会理事会";
+        case "ST":
+            return "联合国秘书处";
+        case "AT":
+            return "联合国行政法庭";
+        case "APLC":
+            return "联合国杀伤人员地雷公约";
+        case "UNEP":
+            return "联合国环境署";
+        case "FCCC":
+            return "联合国气候变化框架公约"
+        default:
+            return "联合国";
+    }
+}
+
+function getDateStr() {
+    let time = new Date();
+    return `${time.getFullYear()}/${time.getMonth() + 1}/${time.getDate()}`;
+}
+
+function getPublishDate(lang, about="") {
+    let start = "Publication Date: ";
+    if(lang === "C")
+        start = "出版日期: ";
+    let lines = about.split("\n");
+    for(let i = 0; i < lines.length; i++) {
+        if(lines[i].startsWith(start)) {
+            return lines[i].replace(start, "").replace(",", "");
+        }
+    }
 }

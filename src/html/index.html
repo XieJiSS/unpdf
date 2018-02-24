@@ -13,7 +13,7 @@
     <script src="./js/alphabet.js"></script>
     <script type="text/javascript" src="./js/head.js"></script>
     <script>
-    const ver = 151;
+    const ver = Number(require("../../package.json").version.replace(/\./g, ""));
     window.UNPDF_VERSION = ver; // for feedback.js
     </script>
 </head>
