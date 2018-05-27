@@ -28,14 +28,11 @@ before_cache:
 branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
-before_deploy:
-- git config --local user.name "JieJiSS"
-- git config --local user.email "c141028@protonmail.com"
-- git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
 deploy:
   provider: releases
   api_key:
     secure: yGxxrPPwhMpWQlBrFRNiXY29O9YJb+/WuY2uz4ukbqAQHWzeG6e/Gdb5TJjr1PbsZ6Is9R1Uw+fMLBzMXRANpYrTSILoV5ECCpALbS8srZs0tc1blbD/KV353mpFbJEwSCKEYmeaVi95LPo2JkJYqleRP077tCw5O/7PdyjQ4OwXeaS65f7RxDwg0LMIDC+IyvkjpiPug60u9GTfMR5wzkSy9VSPwpvJRTjnDpfKbNehcdA0lGrEDasWW/kNfWOyfYKzSVkki1BMUzbAXgiC10U2eelTP+cUrSYU1PTtQIOOMuEDkHPDJnf4aPvtAQrGavJwSCLbwPaW6LtV9LBoVheG1g2mfOMDtNBcCminzYrk1BxNaQ9mYW20FitCAH2m4MIP0fmCCKdIU45NYBZr7FoS3stmntQaDNFB3wliD19jRGTQ268Rl+9OTz4xMef8MDYdiVQXqGri99MA8wF+8m8Jcfw2YeS3i0HiY50eLkpmphGMtpihN4qAWAIBiA5N9hk7QKMNKW49YPUASPD5pH+C0Gs07h3Z1DedVjyPxeusP9M+gpkffudi+ieqtIiztaHCSp2/KYeqmy8abumZ3rqtuN9PmBL+KI4gEKZHw1Y2YCznsNeYXwMoGlGRLQ5HGB+EsgsxgOvPnnAIl8uOZpBNFCn1cJcEsLJHpTCIo9g=
-  file: dist/un_pdf_downloader-1.6.1.dmg
+  file: dist/*
   on:
     repo: JieJiSS/unpdf
+    tags: true
