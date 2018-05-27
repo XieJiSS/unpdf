@@ -338,6 +338,10 @@ function asklist(list, ftype) {
 }
 
 function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发布日期", callback) {
+    if(!navigator.onLine) {
+        clearTimeout(CACHE.inter.pop());
+        return err("Download failed: Your computer is offline!", "Network Error");
+    }
     let lang = l === "C" ? "中文" : "英文";
     swal({
         title: "处理中",
