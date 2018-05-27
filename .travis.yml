@@ -36,3 +36,5 @@ deploy:
   on:
     repo: JieJiSS/unpdf
     tags: true
+after_deploy:
+- ls
