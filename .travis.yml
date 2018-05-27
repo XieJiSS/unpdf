@@ -37,4 +37,5 @@ deploy:
     repo: JieJiSS/unpdf
     tags: true
 after_deploy:
-- ls
+- ls dist/
+  git add dist/
