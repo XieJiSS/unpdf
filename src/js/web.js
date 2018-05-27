@@ -84,6 +84,8 @@ function err(str, title = "出错了！") {
 }
 
 function check() {
+    if(process.platform !== "win32")
+        return;
     http.get("http://jiejiss.xyz/unpdf-upload", r => {
         if (r.statusCode === 403) {
             err(
