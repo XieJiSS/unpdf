@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "test": "exit 0",
-        "start": "electron ."
+        "start": "electron .",
+        "build": "electron-builder"
     },
     "author": "JieJiSS",
     "license": "Apache-2.0",
