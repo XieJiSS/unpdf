@@ -17,7 +17,9 @@ function log(str) {
     $("#log div.log").text(str);
 }
 
-let CACHE = Object.create(null);
+let CACHE = {
+    inter: [],
+};
 
 function emptyCallback() {}
 
@@ -381,7 +383,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
             );
         }
     }
-    CACHE.inter = setTimeout(function () {
+    CACHE.inter.push(setTimeout(function () {
         swal({
             input: 'text',
             html: '自动生成的引用文字（请仔细检查，仅供参考）<div title="他们是：张馨怡，任梓彰，吴开元和王子轩；排名不分先后">感谢我在BJMUNC18 UNDPen的主席们启发</div>',
@@ -397,24 +399,21 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
                 });
             }
         }).then(res => {}, rej => {});
-    }, 5200);
+    }, 5200));
     $.get(u, data => {
         if (data.includes("There is no document matching your request")) {
+            clearTimeout(CACHE.inter.pop());
             swal("下载失败", "该文件不存在于联合国ODS上。", "error");
-            clearTimeout(CACHE.inter);
-            CACHE.inter = null;
             return false;
         } else if(data.includes("Error 91: Object variable not set")) {
             swal("下载失败", "该DOC文件不存在于联合国ODS上。", "error");
-            clearTimeout(CACHE.inter);
-            CACHE.inter = null;
+            clearTimeout(CACHE.inter.pop());
             return false;
         }
         let partialHTML = data.split("URL=")[1];
         if(!partialHTML) {
             swal("出错了！", "文件下载失败：这可能是因为联合国ODS上没有这份文件。", "error");
-            clearTimeout(CACHE.inter);
-            CACHE.inter = null;
+            clearTimeout(CACHE.inter.pop());
             return false;
         }
         let redir = partialHTML.split('">')[0];
@@ -455,7 +454,7 @@ function getFileType() {
         return "DOC";
     } else {
         (console.warn || console.log)("获取文件格式失败，fallback到PDF");
-        window.LAST_ERROR_EVENT = "Failed to get file type: web::getFileType@L450 " + [pdf, doc].join();
+        window.LAST_ERROR_EVENT = "Failed to get file type: web::getFileType@L457 " + [pdf, doc].join();
         return "PDF";
     }
 }
