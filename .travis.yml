@@ -1,34 +1,42 @@
 matrix:
   include:
-    - os: osx
-      osx_image: xcode9.3
-      language: node_js
-      node_js: "7"
-      env:
-        - ELECTRON_CACHE=$HOME/.cache/electron
-        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
-
+  - os: osx
+    osx_image: xcode9.3
+    language: node_js
+    node_js: '7'
+    env:
+    - ELECTRON_CACHE=$HOME/.cache/electron
+    - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 cache:
   directories:
   - node_modules
-  - $HOME/.cache/electron
-  - $HOME/.cache/electron-builder
-
+  - "$HOME/.cache/electron"
+  - "$HOME/.cache/electron-builder"
 before_install:
-  - |
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v2.3.1/git-lfs-$([ "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-2.3.1.tar.gz | tar -xz -C /tmp/git-lfs --strip-components 1
-      export PATH="/tmp/git-lfs:$PATH"
-      brew install yarn
-    fi
+- |
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v2.3.1/git-lfs-$([ "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-2.3.1.tar.gz | tar -xz -C /tmp/git-lfs --strip-components 1
+    export PATH="/tmp/git-lfs:$PATH"
+    brew install yarn
+  fi
 before_script:
-  - git lfs pull
-
+- git lfs pull
 script:
-  - yarn global add electron@1.7.9 && yarn global add electron-builder@20.15.1 && yarn install && yarn build
+- yarn global add electron@1.7.9 && yarn global add electron-builder@20.15.1 && yarn
+  install --pure-lockfile && yarn build
 before_cache:
-  - rm -rf $HOME/.cache/electron-builder/wine
-
+- rm -rf $HOME/.cache/electron-builder/wine
 branches:
   except:
-    - "/^v\\d+\\.\\d+\\.\\d+$/"
+  - "/^v\\d+\\.\\d+\\.\\d+$/"
+before_deploy:
+- git config --local user.name "JieJiSS"
+- git config --local user.email "c141028@protonmail.com"
+- git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key:
+    secure: yGxxrPPwhMpWQlBrFRNiXY29O9YJb+/WuY2uz4ukbqAQHWzeG6e/Gdb5TJjr1PbsZ6Is9R1Uw+fMLBzMXRANpYrTSILoV5ECCpALbS8srZs0tc1blbD/KV353mpFbJEwSCKEYmeaVi95LPo2JkJYqleRP077tCw5O/7PdyjQ4OwXeaS65f7RxDwg0LMIDC+IyvkjpiPug60u9GTfMR5wzkSy9VSPwpvJRTjnDpfKbNehcdA0lGrEDasWW/kNfWOyfYKzSVkki1BMUzbAXgiC10U2eelTP+cUrSYU1PTtQIOOMuEDkHPDJnf4aPvtAQrGavJwSCLbwPaW6LtV9LBoVheG1g2mfOMDtNBcCminzYrk1BxNaQ9mYW20FitCAH2m4MIP0fmCCKdIU45NYBZr7FoS3stmntQaDNFB3wliD19jRGTQ268Rl+9OTz4xMef8MDYdiVQXqGri99MA8wF+8m8Jcfw2YeS3i0HiY50eLkpmphGMtpihN4qAWAIBiA5N9hk7QKMNKW49YPUASPD5pH+C0Gs07h3Z1DedVjyPxeusP9M+gpkffudi+ieqtIiztaHCSp2/KYeqmy8abumZ3rqtuN9PmBL+KI4gEKZHw1Y2YCznsNeYXwMoGlGRLQ5HGB+EsgsxgOvPnnAIl8uOZpBNFCn1cJcEsLJHpTCIo9g=
+  file: dist/un_pdf_downloader-1.6.1.dmg
+  on:
+    repo: JieJiSS/unpdf
