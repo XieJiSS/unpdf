@@ -14,5 +14,14 @@
         "request": "^2.83.0",
         "sweetalert2": "^6.10.1",
         "tmp": "0.0.33"
+    },
+    "build": {
+        "dmg": {
+            "background": "background.png",
+            "window": {
+                "width": 600,
+                "height": 310
+            }
+        }
     }
 }

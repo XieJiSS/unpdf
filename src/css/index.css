@@ -67,7 +67,7 @@ div.short:focus, div.short:active {
 }
 
 div.short#path {
-    font-family: Consolas;
+    font-family: Consolas, Menlo;
 }
 
 span.pad {
@@ -85,7 +85,7 @@ a.button1 {
     color: #4d4d4d;
     padding: 6px 12px;
     border-radius: 3px;
-    font-family: Consolas;
+    font-family: Consolas, Menlo;
     transition: background .2s;
     -webkit-transition: background .2s;
 }
@@ -225,6 +225,6 @@ a.beautifulA {
 }
 
 .swal2-input {
-    font-family: Consolas;
+    font-family: Consolas, Menlo;
     font-size: 13px;
 }

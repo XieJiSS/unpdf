@@ -427,6 +427,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
         let redir = partialHTML.split('">')[0];
         log("正在跳转到" + redir + "，请稍候……");
         if(process.platform === "darwin") {
+            log("检测到MacOS，使用首选浏览器打开……");
             child_process.exec("open " + "https://daccess-ods.un.org" + redir);
         } else {
             let w = window.open(

@@ -3,3 +3,5 @@ out
 node_modules/*
 node_modules
 *.exe
+.DS_Store
+*/.DS_Store
