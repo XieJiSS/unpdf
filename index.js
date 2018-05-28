@@ -83,7 +83,7 @@ ipcMain.on("close-window", function () {
 function createWindow () {
     win = new BrowserWindow({
         width: 760, 
-        height: 517,
+        height: 522,
         icon: path.join(__dirname, 'small_icon.ico'),
         background: "#ffffff",
         show: false,

@@ -13,6 +13,8 @@
 "use strict";
 
 const http = require("http");
+const child_process = require("child_process");
+
 function log(str) {
     $("#log div.log").text(str);
 }
@@ -424,10 +426,14 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
         }
         let redir = partialHTML.split('">')[0];
         log("正在跳转到" + redir + "，请稍候……");
-        let w = window.open(
-            "https://daccess-ods.un.org" + redir,
-            `Download PDF: ${p} ${t || "TITLE NOT AVAILABLE"}`
-        );
+        if(process.platform === "darwin") {
+            child_process.exec("open " + "https://daccess-ods.un.org" + redir);
+        } else {
+            let w = window.open(
+                "https://daccess-ods.un.org" + redir,
+                `Download PDF: ${p} ${t || "TITLE NOT AVAILABLE"}`
+            );
+        }
         $("#path").text(p);
         if (isTitle) {
             let divNode = $("<div>").text(`文件路径为${p}`);
@@ -467,7 +473,11 @@ function getFileType() {
 
 function downloadDOC(url, title, _path = "", callback) {
     callback = callback || emptyCallback;
-    window.open(url, title);
+    if(process.platform === "darwin") {
+        child_process.exec("open " + url);
+    } else {
+        window.open(url, title);
+    }
     $("#path").text(_path);
     swal({
         title: "免责声明",
