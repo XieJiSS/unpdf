@@ -59,13 +59,13 @@
                     ev.preventDefault();
                 } else if (ev.metaKey && process.platform === "darwin") {
                     // console.log("meta + " + ev.key);
-                    if (ev.key === "x") {
+                    if (ev.key === "x" && !ev.shiftKey) {
                         ev.preventDefault();
                         document.execCommand("cut");
-                    } else if (ev.key === "c") {
+                    } else if (ev.key === "c" && !ev.shiftKey) {
                         ev.preventDefault();
                         document.execCommand("copy");
-                    } else if (ev.key === "v") {
+                    } else if (ev.key === "v" && !ev.shiftKey) {
                         ev.preventDefault();
                         document.execCommand("paste", true);
                     } else if (ev.key === "z") {
@@ -75,6 +75,9 @@
                         } else {
                             document.execCommand("undo");
                         }
+                    } else if (ev.key === "a" && !ev.shiftKey) {
+                        ev.preventDefault()
+                        document.execCommand("selectAll");
                     }
                 }
             });
