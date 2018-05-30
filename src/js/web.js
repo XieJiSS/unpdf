@@ -156,6 +156,8 @@ function check() {
                             .split("")
                             .join(".")}`;
                         document.title += " Beta";
+                        if(process.platform !== "win 32")
+                            document.title += ` (on ${ process.platform })`;
                         $("#control-title").text(document.title);
                     } else {
                         document.title += ` v${String(ver)

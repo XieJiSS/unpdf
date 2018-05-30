@@ -111,11 +111,12 @@ function createWindow () {
         transparent: true,
     });
     
-    if(!DEBUG) {
-        if(process.platform === "darwin")
-            win.setMenu(Menu.buildFromTemplate(menu));
-        else win.setMenu(null);
-    } else {
+    if(process.platform === "darwin") {
+        win.setMenu(Menu.buildFromTemplate(menu));
+        console.log("[Darwin] Set menu...");
+    } else win.setMenu(null);
+    
+    if(DEBUG) {
         win.webContents.openDevTools();
     }
     
