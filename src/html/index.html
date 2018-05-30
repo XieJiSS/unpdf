@@ -54,8 +54,28 @@
         var divs = $(".short").toArray();
         divs.forEach(div => {
             div.addEventListener("keydown", ev => {
-                if(ev.keyCode === 13) {
+                // console.log(ev);
+                if (ev.keyCode === 13) {
                     ev.preventDefault();
+                } else if (ev.metaKey && process.platform === "darwin") {
+                    // console.log("meta + " + ev.key);
+                    if (ev.key === "x") {
+                        ev.preventDefault();
+                        document.execCommand("cut");
+                    } else if (ev.key === "c") {
+                        ev.preventDefault();
+                        document.execCommand("copy");
+                    } else if (ev.key === "v") {
+                        ev.preventDefault();
+                        document.execCommand("paste", true);
+                    } else if (ev.key === "z") {
+                        ev.preventDefault();
+                        if (ev.shiftKey) { // redo
+                            document.execCommand("redo");
+                        } else {
+                            document.execCommand("undo");
+                        }
+                    }
                 }
             });
         });
