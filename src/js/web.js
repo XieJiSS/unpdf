@@ -39,6 +39,20 @@ $.fn.extend({
 });
 
 function updateUNPDF(url="http://jiejiss.xyz/unpdf-download") {
+    if(process.platform === "darwin") {
+        url = "http://jiejiss.xyz/unpdf-download-mac";
+        swal({
+            title: "下载新版本",
+            type: "info",
+            text: "Mac OS不支持自动更新。是否手动下载安装包？",
+            confirmButtonText: "下载",
+            showCancelButton: true,
+            cancelButtonText: "放弃"
+        }).then(() => {
+            child_process.exec("open " + url);
+        }, emptyCallback);
+        return true;
+    }
     ipcRenderer.send("update", url);
 }
 
@@ -86,13 +100,7 @@ function err(str, title = "出错了！") {
 }
 
 function check() {
-    if(process.platform !== "win32") {
-        document.title += ` v${ String(ver)
-            .split("")
-            .join(".") } (on ${ process.platform })`;
-        $("#control-title").text(document.title);            
-        return;
-    }
+    
     http.get("http://jiejiss.xyz/unpdf-upload", r => {
         if (r.statusCode === 403) {
             err(
@@ -102,7 +110,7 @@ function check() {
                 ipcRenderer.send("quit", String(r.statusCode));
             });
         } else if (r.statusCode === 404) {
-            err("检查更新失败：Error Code " + r.statusCode).then(() => {});
+            err("检查更新失败：Error Code " + r.statusCode).then(emptyCallback);
         } else {
             r.setEncoding("utf8");
             r.setEncoding("utf8");
@@ -141,7 +149,7 @@ function check() {
                             () => {
                                 updateUNPDF("http://jiejiss.xyz/unpdf-download");
                             },
-                            () => {}
+                            emptyCallback
                         );
                     } else if (info.ver < ver) {
                         document.title += ` v${String(ver)

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 "use strict";
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 let request = require('request');
 const path = require("path");
 const url = require("url");
@@ -26,6 +26,25 @@ ipcMain.on("quit", (event, code) => {
 });
 
 let httpStream;
+
+const menu = [{
+    label: "Application",
+    submenu: [
+        { label: "About", selector: "orderFrontStandardAboutPanel:" },
+        { type: "separator" },
+        { label: "Quit", accelerator: "Command+Q", click: function() { app.quit(); }}
+    ]}, {
+    label: "Edit",
+    submenu: [
+        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+        { type: "separator" },
+        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+    ]}
+];
 
 const DEBUG = process.env["UNPDF_DEBUG"] === "true";
 
@@ -93,7 +112,8 @@ function createWindow () {
     });
     
     if(!DEBUG) {
-        win.setMenu(null);
+        win.setMenu(Menu.buildFromTemplate(menu));
+        console.log("运行成功");
     } else {
         win.webContents.openDevTools();
     }
