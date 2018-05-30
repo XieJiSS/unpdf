@@ -9,7 +9,7 @@
         "start": "electron .",
         "build": "electron-builder --mac"
     },
-    "author": "JieJiSS",
+    "author": "JieJiSS (Pan Ruizhe)",
     "license": "Apache-2.0",
     "dependencies": {
         "request": "^2.83.0",

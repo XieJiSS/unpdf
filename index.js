@@ -112,8 +112,9 @@ function createWindow () {
     });
     
     if(!DEBUG) {
-        win.setMenu(Menu.buildFromTemplate(menu));
-        console.log("运行成功");
+        if(process.platform === "darwin")
+            win.setMenu(Menu.buildFromTemplate(menu));
+        else win.setMenu(null);
     } else {
         win.webContents.openDevTools();
     }
