@@ -22,7 +22,7 @@ before_install:
 before_script:
 - git lfs pull
 script:
-- yarn global add electron@1.7.9 && yarn global add electron-builder@20.15.1 && yarn install --pure-lockfile && yarn build
+- yarn global add electron@1.4.3 && yarn global add electron-builder@20.15.1 && yarn install --pure-lockfile && yarn build
 before_cache:
 - rm -rf $HOME/.cache/electron-builder/wine
 branches:
