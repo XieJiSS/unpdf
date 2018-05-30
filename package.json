@@ -20,7 +20,9 @@
             "background": "background.png",
             "window": {
                 "width": 600,
-                "height": 310
+                "height": 310,
+                "x": 60,
+                "y": 100
             }
         }
     }

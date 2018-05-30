@@ -86,8 +86,13 @@ function err(str, title = "出错了！") {
 }
 
 function check() {
-    if(process.platform !== "win32")
+    if(process.platform !== "win32") {
+        document.title += ` v${ String(ver)
+            .split("")
+            .join(".") } (on ${ process.platform })`;
+        $("#control-title").text(document.title);            
         return;
+    }
     http.get("http://jiejiss.xyz/unpdf-upload", r => {
         if (r.statusCode === 403) {
             err(
@@ -394,7 +399,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
     CACHE.inter.push(setTimeout(function () {
         swal({
             input: 'text',
-            html: '自动生成的引用文字（请仔细检查，仅供参考）<div title="他们是：张馨怡，任梓彰，吴开元和王子轩；排名不分先后">感谢我在BJMUNC18 UNDPen的主席们启发</div>',
+            html: '自动生成的引用文字（请仔细检查，<strong>仅供参考</strong>）<div title="张馨怡，任梓彰，吴开元和王子轩">感谢我在BJMUNC18 UNDPen的主席们启发</div>',
             confirmButtonText: '复制',
             showCancelButton: true,
             inputValue: ctx_ref.format(getCommittee(l, p), t, filedate, p, getDateStr()),
@@ -428,7 +433,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
         log("正在跳转到" + redir + "，请稍候……");
         if(process.platform === "darwin") {
             log("检测到MacOS，使用首选浏览器打开……");
-            child_process.exec("open " + "https://daccess-ods.un.org" + redir);
+            child_process.exec("open '" + "https://daccess-ods.un.org" + redir + "'");
         } else {
             let w = window.open(
                 "https://daccess-ods.un.org" + redir,
@@ -475,14 +480,14 @@ function getFileType() {
 function downloadDOC(url, title, _path = "", callback) {
     callback = callback || emptyCallback;
     if(process.platform === "darwin") {
-        child_process.exec("open " + url);
+        child_process.exec("open '" + url + "'");
     } else {
         window.open(url, title);
     }
     $("#path").text(_path);
     swal({
         title: "免责声明",
-        html: "UN PDF Downloader不保证从联合国官网上下载的文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。",
+        html: "UN PDF Downloader不保证从联合国官网上下载的DOC文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。",
         type: "warning"
     });
     setTimeout(function () {

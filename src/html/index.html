@@ -53,13 +53,6 @@
         <script>
         var divs = $(".short").toArray();
         divs.forEach(div => {
-            div.addEventListener("paste", ev => {
-                var target = ev.target;
-                var arr = target.innerText.split("").filter(s => {
-                    return s.charCodeAt(0) !== 10 && s.charCodeAt(0) !== 13;
-                });
-                target.innerText = arr.join("").replace(/\n+/mg, "");
-            });
             div.addEventListener("keydown", ev => {
                 if(ev.keyCode === 13) {
                     ev.preventDefault();
