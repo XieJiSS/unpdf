@@ -13,6 +13,8 @@
 "use strict";
 
 const http = require("http");
+const child_process = require("child_process");
+
 function log(str) {
     $("#log div.log").text(str);
 }
@@ -37,6 +39,20 @@ $.fn.extend({
 });
 
 function updateUNPDF(url="http://jiejiss.xyz/unpdf-download") {
+    if(process.platform === "darwin") {
+        url = "http://jiejiss.xyz/unpdf-download-mac";
+        swal({
+            title: "下载新版本",
+            type: "info",
+            text: "Mac OS不支持自动更新。是否手动下载安装包？",
+            confirmButtonText: "下载",
+            showCancelButton: true,
+            cancelButtonText: "放弃"
+        }).then(() => {
+            child_process.exec("open " + url);
+        }, emptyCallback);
+        return true;
+    }
     ipcRenderer.send("update", url);
 }
 
@@ -84,8 +100,7 @@ function err(str, title = "出错了！") {
 }
 
 function check() {
-    if(process.platform !== "win32")
-        return;
+    
     http.get("http://jiejiss.xyz/unpdf-upload", r => {
         if (r.statusCode === 403) {
             err(
@@ -95,7 +110,7 @@ function check() {
                 ipcRenderer.send("quit", String(r.statusCode));
             });
         } else if (r.statusCode === 404) {
-            err("检查更新失败：Error Code " + r.statusCode).then(() => {});
+            err("检查更新失败：Error Code " + r.statusCode).then(emptyCallback);
         } else {
             r.setEncoding("utf8");
             r.setEncoding("utf8");
@@ -134,13 +149,15 @@ function check() {
                             () => {
                                 updateUNPDF("http://jiejiss.xyz/unpdf-download");
                             },
-                            () => {}
+                            emptyCallback
                         );
                     } else if (info.ver < ver) {
                         document.title += ` v${String(ver)
                             .split("")
                             .join(".")}`;
                         document.title += " Beta";
+                        if(process.platform !== "win 32")
+                            document.title += ` (on ${ process.platform })`;
                         $("#control-title").text(document.title);
                     } else {
                         document.title += ` v${String(ver)
@@ -392,7 +409,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
     CACHE.inter.push(setTimeout(function () {
         swal({
             input: 'text',
-            html: '自动生成的引用文字（请仔细检查，仅供参考）<div title="他们是：张馨怡，任梓彰，吴开元和王子轩；排名不分先后">感谢我在BJMUNC18 UNDPen的主席们启发</div>',
+            html: '自动生成的引用文字（请仔细检查，<strong>仅供参考</strong>）<div title="张馨怡，任梓彰，吴开元和王子轩">感谢我在BJMUNC18 UNDPen的主席们启发</div>',
             confirmButtonText: '复制',
             showCancelButton: true,
             inputValue: ctx_ref.format(getCommittee(l, p), t, filedate, p, getDateStr()),
@@ -424,10 +441,15 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
         }
         let redir = partialHTML.split('">')[0];
         log("正在跳转到" + redir + "，请稍候……");
-        let w = window.open(
-            "https://daccess-ods.un.org" + redir,
-            `Download PDF: ${p} ${t || "TITLE NOT AVAILABLE"}`
-        );
+        if(process.platform === "darwin") {
+            log("检测到MacOS，使用首选浏览器打开……");
+            child_process.exec("open '" + "https://daccess-ods.un.org" + redir + "'");
+        } else {
+            let w = window.open(
+                "https://daccess-ods.un.org" + redir,
+                `Download PDF: ${p} ${t || "TITLE NOT AVAILABLE"}`
+            );
+        }
         $("#path").text(p);
         if (isTitle) {
             let divNode = $("<div>").text(`文件路径为${p}`);
@@ -467,11 +489,15 @@ function getFileType() {
 
 function downloadDOC(url, title, _path = "", callback) {
     callback = callback || emptyCallback;
-    window.open(url, title);
+    if(process.platform === "darwin") {
+        child_process.exec("open '" + url + "'");
+    } else {
+        window.open(url, title);
+    }
     $("#path").text(_path);
     swal({
         title: "免责声明",
-        html: "UN PDF Downloader不保证从联合国官网上下载的文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。",
+        html: "UN PDF Downloader不保证从联合国官网上下载的DOC文件绝对安全。<br />请确保您的电脑上已经安装了必要的安全更新。",
         type: "warning"
     });
     setTimeout(function () {

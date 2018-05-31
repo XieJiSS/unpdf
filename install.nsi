@@ -2,9 +2,9 @@
 
 ; 安装程序初始定义常量
 !define PRODUCT_NAME "UN PDF Downloader"
-!define PRODUCT_VERSION "1.6.1"
+!define PRODUCT_VERSION "1.6.2"
 !define PRODUCT_PUBLISHER "JieJiSS"
-!define PRODUCT_WEB_SITE "http://jiejiss.xyz/unpdf"
+!define PRODUCT_WEB_SITE "https://jiejiss.xyz/unpdf"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\un_pdf_downloader.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"

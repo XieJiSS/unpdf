@@ -67,7 +67,7 @@ div.short:focus, div.short:active {
 }
 
 div.short#path {
-    font-family: Consolas;
+    font-family: Consolas, Menlo;
 }
 
 span.pad {
@@ -85,7 +85,7 @@ a.button1 {
     color: #4d4d4d;
     padding: 6px 12px;
     border-radius: 3px;
-    font-family: Consolas;
+    font-family: Consolas, Menlo;
     transition: background .2s;
     -webkit-transition: background .2s;
 }
@@ -159,7 +159,7 @@ input.pointer {
     width: 600px;
     padding-left: 4px;
     color: rgb(36, 36, 36);
-    font-family: "Microsoft YaHei";
+    font-family: "Microsoft YaHei", PingFangTC-Regular;
     cursor: default;
 }
 
@@ -225,6 +225,6 @@ a.beautifulA {
 }
 
 .swal2-input {
-    font-family: Consolas;
+    font-family: Consolas, Menlo;
     font-size: 13px;
 }

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 "use strict";
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 let request = require('request');
 const path = require("path");
 const url = require("url");
@@ -83,7 +83,7 @@ ipcMain.on("close-window", function () {
 function createWindow () {
     win = new BrowserWindow({
         width: 760, 
-        height: 517,
+        height: 522,
         icon: path.join(__dirname, 'small_icon.ico'),
         background: "#ffffff",
         show: false,
@@ -92,9 +92,9 @@ function createWindow () {
         transparent: true,
     });
     
-    if(!DEBUG) {
-        win.setMenu(null);
-    } else {
+    win.setMenu(null);
+    
+    if(DEBUG) {
         win.webContents.openDevTools();
     }
     

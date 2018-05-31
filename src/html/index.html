@@ -53,16 +53,32 @@
         <script>
         var divs = $(".short").toArray();
         divs.forEach(div => {
-            div.addEventListener("paste", ev => {
-                var target = ev.target;
-                var arr = target.innerText.split("").filter(s => {
-                    return s.charCodeAt(0) !== 10 && s.charCodeAt(0) !== 13;
-                });
-                target.innerText = arr.join("").replace(/\n+/mg, "");
-            });
             div.addEventListener("keydown", ev => {
-                if(ev.keyCode === 13) {
+                // console.log(ev);
+                if (ev.keyCode === 13) {
                     ev.preventDefault();
+                } else if (ev.metaKey && process.platform === "darwin") {
+                    // console.log("meta + " + ev.key);
+                    if (ev.key === "x" && !ev.shiftKey) {
+                        ev.preventDefault();
+                        document.execCommand("cut");
+                    } else if (ev.key === "c" && !ev.shiftKey) {
+                        ev.preventDefault();
+                        document.execCommand("copy");
+                    } else if (ev.key === "v" && !ev.shiftKey) {
+                        ev.preventDefault();
+                        document.execCommand("paste", true);
+                    } else if (ev.key === "z") {
+                        ev.preventDefault();
+                        if (ev.shiftKey) { // redo
+                            document.execCommand("redo");
+                        } else {
+                            document.execCommand("undo");
+                        }
+                    } else if (ev.key === "a" && !ev.shiftKey) {
+                        ev.preventDefault()
+                        document.execCommand("selectAll");
+                    }
                 }
             });
         });
