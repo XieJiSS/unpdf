@@ -90,6 +90,9 @@ function createWindow () {
         resizable: false,
         frame: false,
         transparent: true,
+        webPreferences: {
+            nativeWindowOpen: true,
+        },
     });
     
     win.setMenu(null);
