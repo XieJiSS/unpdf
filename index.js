@@ -104,6 +104,7 @@ function createWindow () {
     win.on("ready-to-show", () => {
         win.show();
         win.focus();
+        win.webContents.openDevTools();
     });
     win.loadURL(
         url.format({

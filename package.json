@@ -1,7 +1,7 @@
 {
     "name": "un_pdf_downloader",
     "productName": "UN PDF Downloader",
-    "version": "1.6.2",
+    "version": "1.6.3",
     "description": "File downloader for UN ODS",
     "main": "index.js",
     "scripts": {

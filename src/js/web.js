@@ -6,7 +6,7 @@
 /*   By: JieJiSS <c141028@protonmail.com>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/25 14:59:30 by JieJiSS           #+#    #+#             */
-/*   Updated: 2018/01/09 22:56:42 by JieJiSS          ###   ########.fr       */
+/*   Updated: 2018/07/24 18:28:16 by JieJiSS          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ $.fn.extend({
     }
 });
 
-function updateUNPDF(url="http://jiejiss.xyz/unpdf-download") {
+function updateUNPDF(url="https://jiejiss.xyz/unpdf-download") {
     if(process.platform === "darwin") {
-        url = "http://jiejiss.xyz/unpdf-download-mac";
+        url = "https://jiejiss.xyz/unpdf-download-mac";
         swal({
             title: "下载新版本",
             type: "info",
-            text: "Mac OS不支持自动更新。是否手动下载安装包？",
+            text: "UN PDF Downloader (macOS Version) 暂不支持自动更新。是否手动下载安装包？",
             confirmButtonText: "下载",
             showCancelButton: true,
             cancelButtonText: "放弃"
@@ -147,7 +147,7 @@ function check() {
                             cancelButtonText: "取消"
                         }).then(
                             () => {
-                                updateUNPDF("http://jiejiss.xyz/unpdf-download");
+                                updateUNPDF("https://jiejiss.xyz/unpdf-download");
                             },
                             emptyCallback
                         );
@@ -156,7 +156,7 @@ function check() {
                             .split("")
                             .join(".")}`;
                         document.title += " Beta";
-                        if(process.platform !== "win 32")
+                        if(process.platform !== "win32")
                             document.title += ` (on ${ process.platform })`;
                         $("#control-title").text(document.title);
                     } else {
@@ -196,7 +196,13 @@ String.prototype.format = function format() {
         } else if (o === null) {
             return "null";
         } else {
-            if (o.toString) {
+            if (typeof o === "object") {
+                try {
+                    return JSON.parse(o);
+                } catch (e) {
+                    return "{ }";
+                }
+            } else if (o.toString) {
                 return o.toString();
             } else {
                 return Object.prototype.toString.call(o);
@@ -209,7 +215,7 @@ String.prototype.format = function format() {
             str = str.replace(
                 new RegExp(`\\{${i}\\}`, "g"),
                 toStr(arguments[i])
-            ); // 危险操作
+            );
         } else {
             str = str.replace("{}", toStr(arguments[i]));
         }
@@ -219,7 +225,7 @@ String.prototype.format = function format() {
 
 String.prototype.toTitle = function toTitle() {
     let arr = this.valueOf().split(" ");
-    return arr
+    return (arr
         .map(v => {
             if (v.length < 2) {
                 if (v.length === 1) {
@@ -231,7 +237,7 @@ String.prototype.toTitle = function toTitle() {
                 return v[0].toUpperCase() + v.toLowerCase().slice(1);
             }
         })
-        .join(" ");
+        .join(" "));
 };
 
 let ctx_search = "https://search.un.org/results.php?query={0}&lang={1}&tpl=ods";
@@ -305,30 +311,10 @@ function asklist(list, ftype) {
     if (list.length === 0) {
         return;
     }
-    var line = 0;
     swal({
         title: `下载文件？`,
         html:
-            "摘要：<br />" +
-            list[0].about
-                .replace(/\</g, "&lt;")
-                .replace(/\>/g, "&gt;")
-                .replace(/(.*\n.*)/g, function($1) {
-                    if (!$1.trim() || $1.trim() === "-") return "";
-                    if (line <= 9) {
-                        if ($1.replace(/[()[];.\d]+/g, "").trim().length > 5) {
-                            line++;
-                            if ($1.length > 32) {
-                                $1 = $1.slice(0, 16) + "<br />" + $1.slice(16);
-                            }
-                            return $1.trim() + "<br />";
-                        } else {
-                            return $1.trim();
-                        }
-                    } else {
-                        return "";
-                    }
-                }),
+            "摘要：<br />" + shortenText(list[0].about),
         showCancelButton: true,
         showCloseButton: true,
         confirmButtonColor: "#3085d6",
@@ -462,7 +448,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
 }
 
 $("#path")[0].addEventListener(
-    "keydown",
+    "keyup",
     ev => {
         if ((ev.code || ev.keyCode) === 13 || ev.key === "Enter") {
             $("a#submit").click();
@@ -612,4 +598,28 @@ function getPublishDate(lang, about="") {
             return lines[i].replace(start, "").replace(",", "");
         }
     }
+}
+
+function shortenText(text = "") {
+    let line = 0;
+    let humanReadableText = text
+        .replace(/\</g, "&lt;")
+        .replace(/\>/g, "&gt;")
+        .replace(/(.*\n.*)/g, function($1) {
+            if (!$1.trim() || $1.trim() === "-") return "";
+            if (line <= 15) {
+                if ($1.replace(/[()[];.\d]+/g, "").trim().length > 5) {
+                    line++;
+                    if ($1.length > 32) {
+                        $1 = $1.slice(0, 16) + "<br />" + $1.slice(16);
+                    }
+                    return $1.trim().replace(/\n/g, "<br />") + "<br />";
+                } else {
+                    return $1.trim().replace(/\n/g, "<br />");
+                }
+            } else {
+                return "";
+            }
+        });
+    return humanReadableText.split("<br />").filter((_, i) => i <= 15).join("<br />");
 }
