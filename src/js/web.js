@@ -167,6 +167,7 @@ function check() {
                     }
                 } catch (e) {
                     console.error(e.message);
+                    window.LAST_ERROR_EVENT = e.message;
                 }
             });
         }
