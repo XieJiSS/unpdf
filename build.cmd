@@ -1,4 +1,4 @@
 @echo off
-echo ÇëÔÚConEmuÖÐÔËÐÐ£¬²¢¼°Ê±¸ù¾Ý°æ±¾ÐÞ¸Ä±¾½Å±¾¡¢install.nsiºÍpackage.json
+echo ï¿½ï¿½ï¿½ï¿½ConEmuï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ý°æ±¾ï¿½Þ¸Ä±ï¿½ï¿½Å±ï¿½ï¿½ï¿½install.nsiï¿½ï¿½package.json
 pause
-cmd /c electron-packager . un_pdf_downloader --app-version="1.6.3" --ignore="(.cmd|.nsi|license.txt|log.txt|.bat|.exe|.git/)" --app-copyright="(c) Pan Ruizhe 2017-2018" --platform=win32 --arch=ia32 --out=".\out" --overwrite --icon=".\icon.ico" --download.mirror="https://npm.taobao.org/mirrors/electron/" --package-manager=npm --electron-version="1.8.2"
+cmd /c electron-packager . un_pdf_downloader --app-version="1.6.3" --ignore="(.cmd|.nsi|license.txt|log.txt|.bat|.exe|.git/)" --app-copyright="(c) Pan Ruizhe 2017-2018" --platform=win32 --arch=ia32 --out=".\out" --overwrite --icon=".\icon\icon.ico" --download.mirror="https://npm.taobao.org/mirrors/electron/" --package-manager=npm --electron-version="1.8.2"
