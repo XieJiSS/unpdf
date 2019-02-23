@@ -8,7 +8,8 @@
         "test": "exit 0",
         "start": "electron .",
         "build": "electron-packager . 'UN PDF Downloader' --ignore=build --arch=x64 --platform=darwin --electron-version=1.8.7 --icon=build/icon/icon.icns --out=dist/",
-        "dmg": "create-dmg ./dist/*/*.app ./dist/ && rm -rf ./dist/*/*.app"
+        "dmg": "create-dmg ./dist/*/*.app ./dist/ || echo 'code signing failed'",
+        "clean": "rm -rf ./dist/*/*.app"
     },
     "author": "JieJiSS (Pan Ruizhe)",
     "license": "Apache-2.0",

@@ -27,6 +27,7 @@ script:
 - yarn install --pure-lockfile
 - yarn build
 - yarn run dmg
+- yarn run clean
 branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
