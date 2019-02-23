@@ -6,12 +6,11 @@ matrix:
     node_js: '8'
     env:
     - ELECTRON_CACHE=$HOME/.cache/electron
-    - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 cache:
   directories:
   - node_modules
   - "$HOME/.cache/electron"
-  - "$HOME/.cache/electron-builder"
+  - "$HOME/.cache/electron-packager"
 before_install:
 - |
   if [ "$TRAVIS_OS_NAME" == "osx" ]; then
@@ -22,9 +21,11 @@ before_install:
 before_script:
 - git lfs pull
 script:
-- yarn global add electron@1.7.9 && yarn global add electron-builder@20.20.4 && yarn install --pure-lockfile && yarn build
-before_cache:
-- rm -rf $HOME/.cache/electron-builder/wine
+- yarn add --dev electron@1.7.9
+- yarn global add electron-packager@12.1.0
+- yarn global add create-dmg@3.2.0
+- yarn install --pure-lockfile
+- yarn build
 branches:
   except:
   - "/^v\\d+\\.\\d+\\.\\d+$/"
