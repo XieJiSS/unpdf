@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 "use strict";
-const { app, BrowserWindow, ipcMain, Menu } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 let request = require('request');
 const path = require("path");
 const url = require("url");

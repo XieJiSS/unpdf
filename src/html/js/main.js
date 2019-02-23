@@ -32,8 +32,6 @@ function PointCollection() {
     };
  
     this.shake = function () {
-        var randomNum = Math.floor(Math.random() * 5) - 2;
- 
         for (var i = 0; i < this.points.length; i++) {
             var point = this.points[i];
             var dx = this.mousePos.x - point.curPos.x;
@@ -54,12 +52,6 @@ function PointCollection() {
  
             if (point === null)
                 continue;
- 
-            if (window.reset && false) {
-                this.pointCollectionX = 0;
-                this.pointCollectionY = 0;
-                this.mousePos = new Vector(0, 0);
-            }
  
             point.draw(bubbleShape, this.pointCollectionX, this.pointCollectionY, reset);
         }
@@ -250,7 +242,7 @@ function drawName(name, letterColors) {
             var bc = letterColors[ix % letterColors.length];
  
             for (var i = 0; i < chr_data.length; ++i) {
-                point = chr_data[i];
+                var point = chr_data[i];
  
                 g.push(new Point(point[0] + offset,
                     point[1],
@@ -275,9 +267,9 @@ function drawName(name, letterColors) {
  
     for (var j = 0; j < g.length; j++) {
         g[j].curPos.x = (canvasWidth / 2 - (offset - 240) / 2) + g[j].curPos.x;
-        g[j].curPos.y = (canvasHeight / 2 - (105, 60)) + g[j].curPos.y;
+        g[j].curPos.y = (canvasHeight / 2 - 60) + g[j].curPos.y;
         g[j].originalPos.x = (canvasWidth / 2 - (offset - 240) / 2) + g[j].originalPos.x;
-        g[j].originalPos.y = (canvasHeight / 2 - (105, 60)) + g[j].originalPos.y;
+        g[j].originalPos.y = (canvasHeight / 2 - 60) + g[j].originalPos.y;
     }
  
     pointCollection = new PointCollection();
@@ -327,13 +319,6 @@ var letterColors = [red, orange, green, blue, purple, testColor, [155, 100, 39]]
 
 drawName(myName, letterColors);
 
-if(10 < 3)
-{
-    bubbleShape = 'square';
-}
-else
-{
-    bubbleShape = 'circle';
-}
+bubbleShape = 'circle';
 
 bounceBubbles();

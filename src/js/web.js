@@ -62,7 +62,7 @@ var previous = 0;
 var previousTime = new Date().getTime() / 1000;
 var d = 0;
 
-ipcRenderer.on("download", (event, byteLength, totalLength) => {
+ipcRenderer.on("download", (_, byteLength, totalLength) => {
     d++;
     var currentTime = new Date().getTime() / 1000;
     if(currentTime - previousTime >= 1) {
@@ -76,7 +76,7 @@ ipcRenderer.on("download", (event, byteLength, totalLength) => {
     loading.css("width", Math.round(Number(byteLength) / Number(totalLength) * window.innerWidth));
 });
 
-ipcRenderer.on("finish", event => {
+ipcRenderer.on("finish", () => {
     speedDiv.hide();
     loading.fadeOut();
     swal({
@@ -100,7 +100,6 @@ function err(str, title = "出错了！") {
 }
 
 function check() {
-    
     http.get("http://jiejiss.xyz/unpdf-upload", r => {
         if (r.statusCode === 403) {
             err(
@@ -149,7 +148,7 @@ function check() {
                             () => {
                                 updateUNPDF("https://jiejiss.xyz/unpdf-download");
                             },
-                            emptyCallback
+                            noop
                         );
                     } else if (info.ver < ver) {
                         document.title += ` v${String(ver)
@@ -245,7 +244,7 @@ let ctx_search = "https://search.un.org/results.php?query={0}&lang={1}&tpl=ods";
 let ctx_file = "http://daccess-ods.un.org/access.nsf/get?open&DS={0}&Lang={1}";
 let ctx_doc = "https://daccess-ods.un.org/access.nsf/GetFile?Open&DS={0}&Lang={1}&Type=DOC";
 let ctx_ref = "{0}, {1}, {2}, {3}, available at: https://undocs.org/{3} [accessed {4}]"; //委员会名称，标题，发布时间，文件路径，当前日期
-let ctx_refworld = "http://www.refworld.org/cgi-bin/texis/vtx/rwmain?page=search&skip=0&query={0}"; //文件标题
+let ctx_refworld = "http://www.refworld.org/cgi-bin/texis/vtx/rwmain?page=search&skip=0&query={0}"; //@TODO: 文件标题
 
 function main() {
     let l = $("#zh_CN")[0].checked ? "zh_CN" : "en_US";
@@ -266,7 +265,7 @@ function main() {
 function search(str, language, ftype) {
     let files = [];
     let lang = language.search;
-    let jqXHR = $.get(ctx_search.format(encode(str), encode(lang)), data => {
+    $.get(ctx_search.format(encode(str), encode(lang)), data => {
         if (String(data).includes("No pages were found containing")) {
             err("没有搜索到相关信息。");
             return false;
@@ -360,7 +359,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
         onOpen: () => {
             swal.showLoading()
         }
-    }).then(res => {}, rej => {});
+    }).then(noop, noop);
     let u;
     if (!p.startsWith("http")) {
         if (ftype !== "DOC") {
@@ -408,7 +407,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
                     res(true);
                 });
             }
-        }).then(res => {}, rej => {});
+        }).then(noop, noop);
     }, 5200));
     $.get(u, data => {
         if (data.includes("There is no document matching your request")) {
@@ -432,7 +431,7 @@ function download(p, l, t, ftype = "PDF", isTitle = false, filedate="文件发�
             log("检测到MacOS，使用首选浏览器打开……");
             child_process.exec("open '" + "https://daccess-ods.un.org" + redir + "'");
         } else {
-            let w = window.open(
+            window.open(
                 "https://daccess-ods.un.org" + redir,
                 `Download PDF: ${p} ${t || "TITLE NOT AVAILABLE"}`
             );
@@ -578,7 +577,7 @@ function getChnCommitteeName (path="") {
         case "UNEP":
             return "联合国环境署";
         case "FCCC":
-            return "联合国气候变化框架公约"
+            return "联合国气候变化框架公约";
         default:
             return "联合国";
     }
